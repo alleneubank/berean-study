@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You've Heard It Said, pt. 2 — Berean Study</title>
+<style>
+  /* ── CSS Variables ── */
+  :root {
+    --font-serif: 'Georgia', 'Times New Roman', 'Garamond', serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --max-width: 720px;
+    --aside-width: 200px;
+  }
+
+  [data-theme="light"] {
+    --bg: #FAF7F2;
+    --bg-alt: #F0EBE3;
+    --bg-scripture: #F5F0E8;
+    --bg-aside: #EDE8DF;
+    --text: #2C2419;
+    --text-muted: #6B5D4F;
+    --text-scripture: #3D2E1C;
+    --accent: #8B1A1A;
+    --accent-light: #A0522D;
+    --border: #D4CABC;
+    --border-light: #E5DDD2;
+    --shadow: rgba(44, 36, 25, 0.08);
+    --drop-cap: #8B1A1A;
+    --link: #6B3A2A;
+    --link-hover: #8B1A1A;
+  }
+
+  [data-theme="dark"] {
+    --bg: #1A1612;
+    --bg-alt: #242019;
+    --bg-scripture: #2A2520;
+    --bg-aside: #1F1B16;
+    --text: #E0D8CC;
+    --text-muted: #A09580;
+    --text-scripture: #D4C8B4;
+    --accent: #D4856A;
+    --accent-light: #C9A96E;
+    --border: #3D362C;
+    --border-light: #332D24;
+    --shadow: rgba(0, 0, 0, 0.3);
+    --drop-cap: #D4856A;
+    --link: #C9A96E;
+    --link-hover: #D4856A;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    font-size: 18px;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    font-family: var(--font-serif);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    padding: 0;
+  }
+
+  .top-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    padding: 0.5rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    backdrop-filter: blur(8px);
+  }
+
+  .top-bar-left { display: flex; align-items: center; gap: 1rem; }
+
+  .top-bar .logo {
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.7rem;
+  }
+
+  .top-bar-right { display: flex; align-items: center; gap: 0.75rem; }
+
+  .translation-select {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg);
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  .theme-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1;
+  }
+
+  .study-header {
+    max-width: var(--max-width);
+    margin: 3rem auto 0;
+    padding: 0 1.5rem;
+    text-align: center;
+  }
+
+  .study-meta {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+
+  .study-meta .source { font-weight: 600; }
+  .study-meta .divider { margin: 0 0.5rem; opacity: 0.4; }
+
+  .study-title {
+    font-size: 2.2rem;
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    font-style: italic;
+  }
+
+  .study-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+  }
+
+  .series-nav {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .series-nav a {
+    color: var(--link);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .series-nav a:hover { color: var(--link-hover); border-color: var(--link-hover); }
+
+  .divider-ornament {
+    text-align: center;
+    margin: 2.5rem auto;
+    color: var(--border);
+    font-size: 1.2rem;
+    letter-spacing: 0.5rem;
+  }
+
+  .toc {
+    max-width: var(--max-width);
+    margin: 0 auto 3rem;
+    padding: 1.5rem 2rem;
+    background: var(--bg-alt);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+  }
+
+  .toc h2 {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .toc ol { list-style: none; counter-reset: toc; padding: 0; }
+
+  .toc li { counter-increment: toc; margin-bottom: 0.4rem; }
+
+  .toc li::before {
+    content: counter(toc) ".";
+    color: var(--accent);
+    font-weight: 600;
+    margin-right: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .toc a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+
+  .toc a:hover { border-bottom-color: var(--accent); }
+
+  .study-content {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .study-section { margin-bottom: 3.5rem; }
+
+  .section-heading {
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .section-number { color: var(--accent); font-weight: 700; margin-right: 0.3rem; }
+
+  .drop-cap::first-letter {
+    float: left;
+    font-size: 3.5em;
+    line-height: 0.8;
+    padding-right: 0.08em;
+    padding-top: 0.07em;
+    color: var(--drop-cap);
+    font-weight: 400;
+  }
+
+  .scripture-block {
+    background: var(--bg-scripture);
+    border-left: 3px solid var(--accent);
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .scripture-block .verse-text {
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-scripture);
+  }
+
+  .scripture-block .verse-ref {
+    display: block;
+    margin-top: 0.5rem;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--accent);
+  }
+
+  .scripture-block .verse-ref a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--accent);
+  }
+
+  .scripture-block .verse-ref a:hover { border-bottom-style: solid; }
+
+  .scripture-ref {
+    color: var(--link);
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 1px dotted var(--link);
+    white-space: nowrap;
+  }
+
+  .scripture-ref:hover { color: var(--link-hover); border-bottom-style: solid; }
+
+  .verse-expand {
+    margin: 1rem 0;
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .verse-expand summary {
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    background: var(--bg-alt);
+    color: var(--text);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .verse-expand summary::before {
+    content: "\25B8";
+    font-size: 0.7rem;
+    color: var(--accent);
+    transition: transform 0.2s;
+  }
+
+  .verse-expand[open] summary::before { transform: rotate(90deg); }
+
+  .verse-expand .expand-content {
+    padding: 1rem 1.25rem;
+    font-size: 0.92rem;
+    color: var(--text-scripture);
+    font-style: italic;
+    line-height: 1.7;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .verse-expand .expand-note {
+    font-style: normal;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .biblical-placement {
+    background: var(--bg-aside);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+
+  .biblical-placement .aside-label {
+    font-family: var(--font-sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .study-content p { margin-bottom: 1rem; }
+  .study-content strong { font-weight: 700; color: var(--text); }
+
+  .closing-thought {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    margin: 3rem 0;
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .closing-thought h2 { font-size: 1.2rem; font-weight: 400; margin-bottom: 1rem; color: var(--text); }
+
+  .closing-thought p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    max-width: 540px;
+    margin: 0 auto 0.75rem;
+  }
+
+  .scripture-index {
+    max-width: var(--max-width);
+    margin: 3rem auto;
+    padding: 2rem 1.5rem;
+    border-top: 2px solid var(--border);
+  }
+
+  .scripture-index h2 {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .index-columns { columns: 2; column-gap: 2rem; font-size: 0.85rem; }
+
+  .index-entry {
+    break-inside: avoid;
+    margin-bottom: 0.3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .index-entry a { color: var(--link); text-decoration: none; }
+  .index-entry a:hover { color: var(--link-hover); }
+
+  .index-section {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-family: var(--font-sans);
+    margin-left: 0.5rem;
+  }
+
+  .study-footer {
+    max-width: var(--max-width);
+    margin: 3rem auto;
+    padding: 1.5rem;
+    text-align: center;
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-light);
+  }
+
+  .study-footer a { color: var(--link); text-decoration: none; }
+
+  @media (max-width: 600px) {
+    html { font-size: 16px; }
+    .study-title { font-size: 1.8rem; }
+    .section-heading { font-size: 1.2rem; }
+    .index-columns { columns: 1; }
+    .study-header { margin-top: 2rem; }
+    .top-bar { padding: 0.5rem 1rem; }
+  }
+
+  @media print {
+    .top-bar, .theme-toggle, .translation-select { display: none; }
+    body { background: white; color: black; font-size: 11pt; }
+    .scripture-block { border-left-color: #666; background: #f5f5f5; }
+    .study-header { margin-top: 0; }
+    .verse-expand { break-inside: avoid; }
+    .verse-expand[open] .expand-content { display: block; }
+    a { color: inherit; text-decoration: none; }
+    .scripture-ref { border-bottom: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-bar-left">
+    <a href="index.html" class="logo">Berean Study</a>
+  </div>
+  <div class="top-bar-right">
+    <select class="translation-select" id="translationSelect" aria-label="Bible translation">
+      <option value="esv">ESV</option>
+      <option value="nkjv">NKJV</option>
+      <option value="kjv">KJV</option>
+      <option value="nasb20">NASB</option>
+      <option value="niv">NIV</option>
+      <option value="nlt">NLT</option>
+    </select>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">&#9684;</button>
+  </div>
+</div>
+
+<header class="study-header">
+  <div class="study-meta">
+    <span class="source">Fearless House</span>
+    <span class="divider">&middot;</span>
+    <span class="date">March 22, 2026</span>
+    <span class="divider">&middot;</span>
+    <span class="series">You've Heard It Said &middot; Part 2</span>
+  </div>
+  <h1 class="study-title">You've Heard It Said, pt. 2</h1>
+  <p class="study-subtitle">Belief Is Not Enough</p>
+</header>
+
+<div class="divider-ornament">&#10022; &#10022; &#10022;</div>
+
+<nav class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#section-1">Belief Alone Isn't Saving Faith</a></li>
+    <li><a href="#section-2">Adam and Eve Knew the Truth</a></li>
+    <li><a href="#section-3">Hearing Without Owning</a></li>
+    <li><a href="#section-4">Jesus Owned the Truth</a></li>
+    <li><a href="#section-5">Faith Must Become Action</a></li>
+  </ol>
+</nav>
+
+<main class="study-content">
+
+  <!-- ══════════ Section 1 ══════════ -->
+  <section class="study-section" id="section-1">
+    <h2 class="section-heading"><span class="section-number">1.</span> Belief Alone Isn't Saving Faith</h2>
+
+    <div class="scripture-block">
+      <p class="verse-text">"You believe that there is one God. Good! Even the demons believe that&mdash;and shudder."</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/jas/2/19/" class="scripture-ref" data-book="jas" data-chapter="2" data-verse="19" target="_blank" rel="noopener">James 2:19</a></span>
+    </div>
+
+    <p class="drop-cap">James is writing to early Jewish Christians who were separating faith from action. His argument is devastating in its simplicity: intellectual assent to God's existence is something even demons possess. If belief alone were enough, the demons would be saved. They're not. They shudder&mdash;they know the truth and are terrified by it, but it doesn't transform them.</p>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/jas/2/14/" class="scripture-ref" data-book="jas" data-chapter="2" data-verse="14" target="_blank" rel="noopener">James 2:14-17</a></summary>
+      <div class="expand-content">"What good is it, my brothers and sisters, if someone claims to have faith but has no deeds? Can such faith save them? Suppose a brother or a sister is without clothes and daily food. If one of you says to them, 'Go in peace; keep warm and well fed,' but does nothing about their physical needs, what good is it? In the same way, faith by itself, if it is not accompanied by action, is dead."</div>
+      <p class="expand-note">The full context of James' argument. Belief that doesn't move your hands isn't faith&mdash;it's sentiment.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/mat/7/21/" class="scripture-ref" data-book="mat" data-chapter="7" data-verse="21" target="_blank" rel="noopener">Matthew 7:21-23</a></summary>
+      <div class="expand-content">"Not everyone who says to me, 'Lord, Lord,' will enter the kingdom of heaven, but only the one who does the will of my Father who is in heaven. On that day many will say to me, 'Lord, Lord, did we not prophesy in your name, and cast out demons in your name, and do many mighty works in your name?' And then will I declare to them, 'I never knew you; depart from me, you workers of lawlessness.'"</div>
+      <p class="expand-note">Jesus describes people who prophesied and cast out demons in His name&mdash;they <em>believed</em>&mdash;yet He says "I never knew you." The word "knew" here is <em>ginosko</em>&mdash;intimate, relational knowing. They had belief without relationship.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/luk/4/41/" class="scripture-ref" data-book="luk" data-chapter="4" data-verse="41" target="_blank" rel="noopener">Luke 4:41</a></summary>
+      <div class="expand-content">"And demons also came out of many, crying, 'You are the Son of God!' But he rebuked them and would not allow them to speak, because they knew that he was the Christ."</div>
+      <p class="expand-note">The demons had correct theology. Their christology was flawless. But correct doctrine without surrender is just information.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/heb/11/6/" class="scripture-ref" data-book="heb" data-chapter="11" data-verse="6" target="_blank" rel="noopener">Hebrews 11:6</a></summary>
+      <div class="expand-content">"And without faith it is impossible to please him, for whoever would draw near to God must believe that he exists and that he rewards those who earnestly seek him."</div>
+      <p class="expand-note">Notice the two parts: believe He exists <em>and</em> earnestly seek Him. Belief is the starting line, not the finish.</p>
+    </details>
+
+    <div class="biblical-placement">
+      <p class="aside-label">Biblical Placement</p>
+      <p>James was likely one of the earliest New Testament letters (mid-40s AD). He's not contradicting Paul's teaching on salvation by faith (Romans 3&ndash;5)&mdash;he's defining what <em>real</em> faith looks like. Paul and James are looking at the same coin from different sides: Paul says faith, not works, justifies. James says faith that doesn't produce works was never real faith.</p>
+    </div>
+  </section>
+
+  <!-- ══════════ Section 2 ══════════ -->
+  <section class="study-section" id="section-2">
+    <h2 class="section-heading"><span class="section-number">2.</span> Adam and Eve Knew the Truth</h2>
+
+    <div class="scripture-block">
+      <p class="verse-text">"And the Lord God commanded the man, 'You are free to eat from any tree in the garden; but you must not eat from the tree of the knowledge of good and evil, for when you eat from it you will certainly die.'"</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/gen/2/16/" class="scripture-ref" data-book="gen" data-chapter="2" data-verse="16" target="_blank" rel="noopener">Genesis 2:16-17</a></span>
+    </div>
+
+    <p class="drop-cap">The command was clear. God didn't hide it, obscure it, or make it complicated. Adam and Eve heard the truth directly from God Himself&mdash;no intermediary, no mistranslation, no ambiguity. And they still chose otherwise. Knowing truth and owning it are not the same thing.</p>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/gen/3/1/" class="scripture-ref" data-book="gen" data-chapter="3" data-verse="1" target="_blank" rel="noopener">Genesis 3:1-6</a></summary>
+      <div class="expand-content">"Now the serpent was more crafty than any other beast of the field that the Lord God had made. He said to the woman, 'Did God actually say, "You shall not eat of any tree in the garden"?'"</div>
+      <p class="expand-note">The serpent's strategy wasn't to deny the truth but to reframe it: "Did God really say...?" Eve knew the truth. She repeated it accurately. But knowing it didn't anchor her against the serpent's reframing. She heard the truth but hadn't owned it deeply enough to withstand challenge.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/rom/1/19/" class="scripture-ref" data-book="rom" data-chapter="1" data-verse="19" target="_blank" rel="noopener">Romans 1:19-21</a></summary>
+      <div class="expand-content">"For what can be known about God is plain to them, because God has shown it to them. For his invisible attributes, namely, his eternal power and divine nature, have been clearly perceived, ever since the creation of the world, in the things that have been made. So they are without excuse. For although they knew God, they did not honor him as God or give thanks to him, but they became futile in their thinking, and their foolish hearts were darkened."</div>
+      <p class="expand-note">Paul describes humanity broadly&mdash;truth was <em>known</em> but not honored. Knowledge without ownership leads to futility.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/hos/4/6/" class="scripture-ref" data-book="hos" data-chapter="4" data-verse="6" target="_blank" rel="noopener">Hosea 4:6</a></summary>
+      <div class="expand-content">"My people are destroyed for lack of knowledge; because you have rejected knowledge, I reject you from being a priest to me."</div>
+      <p class="expand-note">The Hebrew here implies <em>rejected</em> knowledge&mdash;not ignorance but refusal to own what they already knew.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/jhn/3/19/" class="scripture-ref" data-book="jhn" data-chapter="3" data-verse="19" target="_blank" rel="noopener">John 3:19-20</a></summary>
+      <div class="expand-content">"And this is the judgment: the light has come into the world, and people loved the darkness rather than the light because their works were evil. For everyone who does wicked things hates the light and does not come to the light, lest his works should be exposed."</div>
+      <p class="expand-note">The problem isn't a lack of truth. The problem is preferring something else.</p>
+    </details>
+
+    <div class="biblical-placement">
+      <p class="aside-label">Biblical Placement</p>
+      <p>Genesis 2&ndash;3 establishes the pattern that repeats through all of Scripture: God reveals truth clearly, humans hear it, and the test is always whether they'll <em>own</em> it or let something else override it. This is the first instance of the sermon's core thesis&mdash;knowing and owning are different things.</p>
+    </div>
+  </section>
+
+  <!-- ══════════ Section 3 ══════════ -->
+  <section class="study-section" id="section-3">
+    <h2 class="section-heading"><span class="section-number">3.</span> Hearing Without Owning</h2>
+
+    <div class="scripture-block">
+      <p class="verse-text">"And everyone who hears these words of mine and does not do them will be like a foolish man who built his house on the sand."</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/mat/7/26/" class="scripture-ref" data-book="mat" data-chapter="7" data-verse="26" target="_blank" rel="noopener">Matthew 7:26</a></span>
+    </div>
+
+    <p class="drop-cap">This comes at the very end of the Sermon on the Mount&mdash;Jesus' final illustration. Both the wise and foolish builders <em>heard</em> the same words. The difference was entirely in response: one acted, one didn't. The storm didn't distinguish between listeners&mdash;it distinguished between practitioners.</p>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/mat/7/24/" class="scripture-ref" data-book="mat" data-chapter="7" data-verse="24" target="_blank" rel="noopener">Matthew 7:24-25</a></summary>
+      <div class="expand-content">"Everyone then who hears these words of mine and does them will be like a wise man who built his house on the rock. And the rain fell, and the floods came, and the winds blew and beat on that house, but it did not fall, because it had been founded on the rock."</div>
+      <p class="expand-note">The wise builder for contrast. Same sermon. Same truth. Different foundation&mdash;and the difference was action.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/eze/33/30/" class="scripture-ref" data-book="eze" data-chapter="33" data-verse="30" target="_blank" rel="noopener">Ezekiel 33:30-32</a></summary>
+      <div class="expand-content">"As for you, son of man, your people who talk together about you by the walls and at the doors of the houses, say to one another, each to his brother, 'Come, and hear what the word is that comes from the Lord.' And they come to you as people come, and they sit before you as my people, and they hear what you say but they will not do it; for with lustful talk in their mouths they act; their heart is set on their gain. And behold, you are to them like one who sings lustful songs with a beautiful voice and plays well on an instrument, for they hear what you say, but they will not do it."</div>
+      <p class="expand-note">A striking Old Testament parallel. God tells Ezekiel that the people enjoy his preaching like entertainment. They hear. They don't own.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/heb/4/2/" class="scripture-ref" data-book="heb" data-chapter="4" data-verse="2" target="_blank" rel="noopener">Hebrews 4:2</a></summary>
+      <div class="expand-content">"For good news came to us just as to them, but the message they heard did not benefit them, because they were not united by faith with those who listened."</div>
+      <p class="expand-note">The word "united" here is <em>synkerannymi</em>&mdash;to mix together, to blend. Truth has to be blended with faith to become structural. Otherwise it's just noise.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/rom/2/13/" class="scripture-ref" data-book="rom" data-chapter="2" data-verse="13" target="_blank" rel="noopener">Romans 2:13</a></summary>
+      <div class="expand-content">"For it is not the hearers of the law who are righteous before God, but the doers of the law who will be justified."</div>
+      <p class="expand-note">Paul echoes James and Jesus: hearing without doing produces nothing.</p>
+    </details>
+
+    <div class="biblical-placement">
+      <p class="aside-label">Biblical Placement</p>
+      <p>Jesus closes the Sermon on the Mount with this parable deliberately. Everything He just taught&mdash;the Beatitudes, the antitheses ("you have heard it said..."), the Lord's Prayer, the narrow gate&mdash;all of it culminates in one question: will you <em>do</em> this or just <em>admire</em> it?</p>
+    </div>
+  </section>
+
+  <!-- ══════════ Section 4 ══════════ -->
+  <section class="study-section" id="section-4">
+    <h2 class="section-heading"><span class="section-number">4.</span> Jesus Owned the Truth</h2>
+
+    <div class="scripture-block">
+      <p class="verse-text">"Father, if you are willing, remove this cup from me. Nevertheless, not my will, but yours, be done."</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/luk/22/42/" class="scripture-ref" data-book="luk" data-chapter="22" data-verse="42" target="_blank" rel="noopener">Luke 22:42</a></span>
+    </div>
+
+    <p class="drop-cap">This is Gethsemane&mdash;the night before the crucifixion. Jesus doesn't merely <em>believe</em> in the Father's plan. He <em>submits</em> to it at the point of greatest personal cost. "Not my will but yours" is the ultimate expression of owned truth. He felt the full weight of what was coming and still chose it.</p>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/phl/2/5/" class="scripture-ref" data-book="phl" data-chapter="2" data-verse="5" target="_blank" rel="noopener">Philippians 2:5-8</a></summary>
+      <div class="expand-content">"Have this mind among yourselves, which is yours in Christ Jesus, who, though he was in the form of God, did not count equality with God a thing to be grasped, but emptied himself, by taking the form of a servant, being born in the likeness of men. And being found in human form, he humbled himself by becoming obedient to the point of death, even death on a cross."</div>
+      <p class="expand-note">The full arc of ownership. He didn't just agree with the plan&mdash;He emptied Himself into it.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/jhn/10/17/" class="scripture-ref" data-book="jhn" data-chapter="10" data-verse="17" target="_blank" rel="noopener">John 10:17-18</a></summary>
+      <div class="expand-content">"For this reason the Father loves me, because I lay down my life that I may take it up again. No one takes it from me, but I lay it down of my own accord. I have authority to lay it down, and I have authority to take it up again."</div>
+      <p class="expand-note">Jesus wasn't a victim. He <em>chose</em> the cross. That's the difference between believing in sacrifice and <em>being</em> the sacrifice.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/heb/5/8/" class="scripture-ref" data-book="heb" data-chapter="5" data-verse="8" target="_blank" rel="noopener">Hebrews 5:8</a></summary>
+      <div class="expand-content">"Although he was a son, he learned obedience through what he suffered."</div>
+      <p class="expand-note">Even Jesus' ownership of truth was forged through suffering. Obedience wasn't automatic&mdash;it was <em>learned</em>. This validates the struggle of owning truth when it costs something.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/heb/12/2/" class="scripture-ref" data-book="heb" data-chapter="12" data-verse="2" target="_blank" rel="noopener">Hebrews 12:2</a></summary>
+      <div class="expand-content">"Looking to Jesus, the founder and perfecter of our faith, who for the joy that was set before him endured the cross, despising the shame, and is seated at the right hand of the throne of God."</div>
+      <p class="expand-note">Owned truth looks past immediate pain to ultimate purpose.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/isa/50/7/" class="scripture-ref" data-book="isa" data-chapter="50" data-verse="7" target="_blank" rel="noopener">Isaiah 50:7</a></summary>
+      <div class="expand-content">"But the Lord God helps me; therefore I have not been disgraced; therefore I have set my face like a flint, and I know that I shall not be put to shame."</div>
+      <p class="expand-note">A messianic prophecy. "Set my face like flint" is resolute ownership&mdash;no wavering.</p>
+    </details>
+
+    <div class="biblical-placement">
+      <p class="aside-label">Biblical Placement</p>
+      <p>Gethsemane is the climactic test of everything the sermon series is about. If Part 1 was "truth must be discovered," and Part 2 is "belief must become ownership," then Jesus in Gethsemane is the supreme example. He <em>discovered</em> the Father's will, He <em>believed</em> it, and at the moment of greatest agony, He <em>owned</em> it.</p>
+    </div>
+  </section>
+
+  <!-- ══════════ Section 5 ══════════ -->
+  <section class="study-section" id="section-5">
+    <h2 class="section-heading"><span class="section-number">5.</span> Faith Must Become Action</h2>
+
+    <div class="scripture-block">
+      <p class="verse-text">"So also faith by itself, if it does not have works, is dead."</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/jas/2/17/" class="scripture-ref" data-book="jas" data-chapter="2" data-verse="17" target="_blank" rel="noopener">James 2:17</a></span>
+    </div>
+
+    <p class="drop-cap">James returns&mdash;closing the sermon the same way he opened it. The Greek word for "dead" is <em>nekra</em>&mdash;the same word used for a literal corpse. Faith without works isn't weak or incomplete&mdash;it's a dead body. It has the form of life but no breath in it.</p>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/jas/2/21/" class="scripture-ref" data-book="jas" data-chapter="2" data-verse="21" target="_blank" rel="noopener">James 2:21-24</a></summary>
+      <div class="expand-content">"Was not Abraham our father justified by works when he offered up his son Isaac on the altar? You see that faith was active along with his works, and faith was completed by his works; and the Scripture was fulfilled that says, 'Abraham believed God, and it was counted to him as righteousness'&mdash;and he was called a friend of God. You see that a person is justified by works and not by faith alone."</div>
+      <p class="expand-note">Abraham <em>believed</em> God's promise (Genesis 15:6). But that belief was <em>proven</em>&mdash;owned&mdash;when he acted on it at Moriah (Genesis 22). The two moments are decades apart. Ownership was the bridge.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/gal/5/6/" class="scripture-ref" data-book="gal" data-chapter="5" data-verse="6" target="_blank" rel="noopener">Galatians 5:6</a></summary>
+      <div class="expand-content">"For in Christ Jesus neither circumcision nor uncircumcision counts for anything, but only faith working through love."</div>
+      <p class="expand-note">Paul agrees with James: real faith <em>expresses</em>&mdash;it moves outward. The Greek is <em>energoumene</em>&mdash;faith <em>energized</em> by love. Living faith is kinetic.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/1jo/3/18/" class="scripture-ref" data-book="1jo" data-chapter="3" data-verse="18" target="_blank" rel="noopener">1 John 3:18</a></summary>
+      <div class="expand-content">"Little children, let us not love in word or talk but in deed and in truth."</div>
+      <p class="expand-note">John, the apostle of love, says the same thing: owned conviction shows up in behavior, not vocabulary.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/tit/1/16/" class="scripture-ref" data-book="tit" data-chapter="1" data-verse="16" target="_blank" rel="noopener">Titus 1:16</a></summary>
+      <div class="expand-content">"They profess to know God, but they deny him by their works. They are detestable, disobedient, unfit for any good work."</div>
+      <p class="expand-note">The ultimate diagnosis of belief without ownership.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/mat/25/31/" class="scripture-ref" data-book="mat" data-chapter="25" data-verse="31" target="_blank" rel="noopener">Matthew 25:31-46</a></summary>
+      <div class="expand-content">"Then the King will say to those on his right, 'Come, you who are blessed by my Father, inherit the kingdom prepared for you from the foundation of the world. For I was hungry and you gave me food, I was thirsty and you gave me drink, I was a stranger and you welcomed me.'"</div>
+      <p class="expand-note">The sheep and goats. The distinction isn't theology&mdash;both groups call Him "Lord." The distinction is whether faith became tangible: the sheep owned their faith to the point of action; the goats believed but didn't move.</p>
+    </details>
+
+    <div class="biblical-placement">
+      <p class="aside-label">Biblical Placement</p>
+      <p>James 2 is often seen as tension with Paul's Romans 3&ndash;4. But they're answering different questions. Paul asks: "How is a person justified before God?" Answer: by faith. James asks: "How do you know faith is real?" Answer: by its fruit. The sermon's closing point lands exactly on James' side&mdash;faith that remains in the head and never reaches the hands was never alive to begin with.</p>
+    </div>
+  </section>
+
+  <!-- ══════════ Closing ══════════ -->
+  <section class="closing-thought">
+    <h2>Closing Thought</h2>
+    <p>Belief acknowledges truth.</p>
+    <p>Ownership lives by it.</p>
+    <p>Faith becomes powerful when truth stops being something you believe and becomes something you live.</p>
+  </section>
+
+  <!-- ══════════ The Arc ══════════ -->
+  <section class="study-section" id="section-arc">
+    <h2 class="section-heading">The Arc of the Series</h2>
+
+    <p>Parts 1 and 2 together trace a progression that mirrors the entire biblical narrative:</p>
+
+    <p><strong>1. Truth revealed</strong> &mdash; God speaks clearly (Eden, Sinai, the Prophets, Jesus)</p>
+    <p><strong>2. Truth discovered</strong> &mdash; The individual encounters it personally (Part 1)</p>
+    <p><strong>3. Truth believed</strong> &mdash; Intellectual assent&mdash;necessary but insufficient (Part 2, point 1)</p>
+    <p><strong>4. Truth owned</strong> &mdash; It becomes internal conviction that costs something (Part 2, points 2&ndash;4)</p>
+    <p><strong>5. Truth lived</strong> &mdash; Faith becomes action (Part 2, point 5)</p>
+
+    <div class="scripture-block">
+      <p class="verse-text">"I will put my law in their minds and write it on their hearts. I will be their God, and they will be my people."</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/jer/31/33/" class="scripture-ref" data-book="jer" data-chapter="31" data-verse="33" target="_blank" rel="noopener">Jeremiah 31:33</a></span>
+    </div>
+
+    <p>The move from stone tablets (external) to hearts (internal) is the move from belief to ownership.</p>
+
+    <div class="scripture-block">
+      <p class="verse-text">"And I will give you a new heart, and a new spirit I will put within you. And I will remove the heart of stone from your flesh and give you a heart of flesh. And I will put my Spirit within you, and cause you to walk in my statutes and be careful to obey my rules."</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/eze/36/26/" class="scripture-ref" data-book="eze" data-chapter="36" data-verse="26" target="_blank" rel="noopener">Ezekiel 36:26-27</a></span>
+    </div>
+
+    <p>God doesn't just want agreement&mdash;He wants transformation that produces movement.</p>
+  </section>
+
+</main>
+
+<!-- ══════════ Scripture Index ══════════ -->
+<section class="scripture-index">
+  <h2>Scripture Index</h2>
+  <div class="index-columns">
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/gen/2/16/" class="scripture-ref" data-book="gen" data-chapter="2" data-verse="16" target="_blank" rel="noopener">Genesis 2:16-17</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/gen/3/1/" class="scripture-ref" data-book="gen" data-chapter="3" data-verse="1" target="_blank" rel="noopener">Genesis 3:1-6</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/hos/4/6/" class="scripture-ref" data-book="hos" data-chapter="4" data-verse="6" target="_blank" rel="noopener">Hosea 4:6</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/isa/50/7/" class="scripture-ref" data-book="isa" data-chapter="50" data-verse="7" target="_blank" rel="noopener">Isaiah 50:7</a>
+      <span class="index-section"><a href="#section-4">&sect;4</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/jer/31/33/" class="scripture-ref" data-book="jer" data-chapter="31" data-verse="33" target="_blank" rel="noopener">Jeremiah 31:33</a>
+      <span class="index-section"><a href="#section-arc">Arc</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/eze/33/30/" class="scripture-ref" data-book="eze" data-chapter="33" data-verse="30" target="_blank" rel="noopener">Ezekiel 33:30-32</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/eze/36/26/" class="scripture-ref" data-book="eze" data-chapter="36" data-verse="26" target="_blank" rel="noopener">Ezekiel 36:26-27</a>
+      <span class="index-section"><a href="#section-arc">Arc</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/mat/7/21/" class="scripture-ref" data-book="mat" data-chapter="7" data-verse="21" target="_blank" rel="noopener">Matthew 7:21-23</a>
+      <span class="index-section"><a href="#section-1">&sect;1</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/mat/7/24/" class="scripture-ref" data-book="mat" data-chapter="7" data-verse="24" target="_blank" rel="noopener">Matthew 7:24-26</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/mat/25/31/" class="scripture-ref" data-book="mat" data-chapter="25" data-verse="31" target="_blank" rel="noopener">Matthew 25:31-46</a>
+      <span class="index-section"><a href="#section-5">&sect;5</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/luk/4/41/" class="scripture-ref" data-book="luk" data-chapter="4" data-verse="41" target="_blank" rel="noopener">Luke 4:41</a>
+      <span class="index-section"><a href="#section-1">&sect;1</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/luk/22/42/" class="scripture-ref" data-book="luk" data-chapter="22" data-verse="42" target="_blank" rel="noopener">Luke 22:42</a>
+      <span class="index-section"><a href="#section-4">&sect;4</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/jhn/3/19/" class="scripture-ref" data-book="jhn" data-chapter="3" data-verse="19" target="_blank" rel="noopener">John 3:19-20</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/jhn/10/17/" class="scripture-ref" data-book="jhn" data-chapter="10" data-verse="17" target="_blank" rel="noopener">John 10:17-18</a>
+      <span class="index-section"><a href="#section-4">&sect;4</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/rom/1/19/" class="scripture-ref" data-book="rom" data-chapter="1" data-verse="19" target="_blank" rel="noopener">Romans 1:19-21</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/rom/2/13/" class="scripture-ref" data-book="rom" data-chapter="2" data-verse="13" target="_blank" rel="noopener">Romans 2:13</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/gal/5/6/" class="scripture-ref" data-book="gal" data-chapter="5" data-verse="6" target="_blank" rel="noopener">Galatians 5:6</a>
+      <span class="index-section"><a href="#section-5">&sect;5</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/phl/2/5/" class="scripture-ref" data-book="phl" data-chapter="2" data-verse="5" target="_blank" rel="noopener">Philippians 2:5-8</a>
+      <span class="index-section"><a href="#section-4">&sect;4</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/tit/1/16/" class="scripture-ref" data-book="tit" data-chapter="1" data-verse="16" target="_blank" rel="noopener">Titus 1:16</a>
+      <span class="index-section"><a href="#section-5">&sect;5</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/heb/4/2/" class="scripture-ref" data-book="heb" data-chapter="4" data-verse="2" target="_blank" rel="noopener">Hebrews 4:2</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/heb/5/8/" class="scripture-ref" data-book="heb" data-chapter="5" data-verse="8" target="_blank" rel="noopener">Hebrews 5:8</a>
+      <span class="index-section"><a href="#section-4">&sect;4</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/heb/11/6/" class="scripture-ref" data-book="heb" data-chapter="11" data-verse="6" target="_blank" rel="noopener">Hebrews 11:6</a>
+      <span class="index-section"><a href="#section-1">&sect;1</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/heb/12/2/" class="scripture-ref" data-book="heb" data-chapter="12" data-verse="2" target="_blank" rel="noopener">Hebrews 12:2</a>
+      <span class="index-section"><a href="#section-4">&sect;4</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/jas/2/14/" class="scripture-ref" data-book="jas" data-chapter="2" data-verse="14" target="_blank" rel="noopener">James 2:14-17</a>
+      <span class="index-section"><a href="#section-1">&sect;1</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/jas/2/19/" class="scripture-ref" data-book="jas" data-chapter="2" data-verse="19" target="_blank" rel="noopener">James 2:19</a>
+      <span class="index-section"><a href="#section-1">&sect;1</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/jas/2/21/" class="scripture-ref" data-book="jas" data-chapter="2" data-verse="21" target="_blank" rel="noopener">James 2:21-24</a>
+      <span class="index-section"><a href="#section-5">&sect;5</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/1jo/3/18/" class="scripture-ref" data-book="1jo" data-chapter="3" data-verse="18" target="_blank" rel="noopener">1 John 3:18</a>
+      <span class="index-section"><a href="#section-5">&sect;5</a></span>
+    </div>
+  </div>
+</section>
+
+<footer class="study-footer">
+  <p>Generated by <a href="index.html">Berean Study</a> &middot; Scripture links open at <a href="https://www.blueletterbible.org" target="_blank" rel="noopener">Blue Letter Bible</a></p>
+  <p>Inline verse text: ESV &middot; External links follow your selected translation</p>
+</footer>
+
+<script>
+(function() {
+  var html = document.documentElement;
+  var toggle = document.getElementById('themeToggle');
+  var stored = localStorage.getItem('berean-theme');
+  if (stored) html.setAttribute('data-theme', stored);
+
+  toggle.addEventListener('click', function() {
+    var next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('berean-theme', next);
+  });
+
+  var select = document.getElementById('translationSelect');
+  var savedTranslation = localStorage.getItem('berean-translation') || 'esv';
+  select.value = savedTranslation;
+  updateLinks(savedTranslation);
+
+  select.addEventListener('change', function() {
+    var translation = this.value;
+    localStorage.setItem('berean-translation', translation);
+    updateLinks(translation);
+  });
+
+  function updateLinks(translation) {
+    document.querySelectorAll('.scripture-ref').forEach(function(link) {
+      var book = link.dataset.book;
+      var chapter = link.dataset.chapter;
+      var verse = link.dataset.verse;
+      if (book && chapter) {
+        var url = 'https://www.blueletterbible.org/' + translation + '/' + book + '/' + chapter + '/';
+        if (verse) url += verse + '/';
+        link.href = url;
+      }
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

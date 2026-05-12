@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You've Heard It Said, pt. 3 — Berean Study</title>
+<style>
+  /* ── CSS Variables ── */
+  :root {
+    --font-serif: 'Georgia', 'Times New Roman', 'Garamond', serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --max-width: 720px;
+    --aside-width: 200px;
+  }
+
+  [data-theme="light"] {
+    --bg: #FAF7F2;
+    --bg-alt: #F0EBE3;
+    --bg-scripture: #F5F0E8;
+    --bg-aside: #EDE8DF;
+    --text: #2C2419;
+    --text-muted: #6B5D4F;
+    --text-scripture: #3D2E1C;
+    --accent: #8B1A1A;
+    --accent-light: #A0522D;
+    --border: #D4CABC;
+    --border-light: #E5DDD2;
+    --shadow: rgba(44, 36, 25, 0.08);
+    --drop-cap: #8B1A1A;
+    --link: #6B3A2A;
+    --link-hover: #8B1A1A;
+  }
+
+  [data-theme="dark"] {
+    --bg: #1A1612;
+    --bg-alt: #242019;
+    --bg-scripture: #2A2520;
+    --bg-aside: #1F1B16;
+    --text: #E0D8CC;
+    --text-muted: #A09580;
+    --text-scripture: #D4C8B4;
+    --accent: #D4856A;
+    --accent-light: #C9A96E;
+    --border: #3D362C;
+    --border-light: #332D24;
+    --shadow: rgba(0, 0, 0, 0.3);
+    --drop-cap: #D4856A;
+    --link: #C9A96E;
+    --link-hover: #D4856A;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    font-size: 18px;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    font-family: var(--font-serif);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    padding: 0;
+  }
+
+  .top-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    padding: 0.5rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    backdrop-filter: blur(8px);
+  }
+
+  .top-bar-left { display: flex; align-items: center; gap: 1rem; }
+
+  .top-bar .logo {
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.7rem;
+  }
+
+  .top-bar-right { display: flex; align-items: center; gap: 0.75rem; }
+
+  .translation-select {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg);
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  .theme-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1;
+  }
+
+  .study-header {
+    max-width: var(--max-width);
+    margin: 3rem auto 0;
+    padding: 0 1.5rem;
+    text-align: center;
+  }
+
+  .study-meta {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+
+  .study-meta .source { font-weight: 600; }
+  .study-meta .divider { margin: 0 0.5rem; opacity: 0.4; }
+
+  .study-title {
+    font-size: 2.2rem;
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    font-style: italic;
+  }
+
+  .study-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+  }
+
+  .series-nav {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .series-nav a {
+    color: var(--link);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .series-nav a:hover { color: var(--link-hover); border-color: var(--link-hover); }
+
+  .divider-ornament {
+    text-align: center;
+    margin: 2.5rem auto;
+    color: var(--border);
+    font-size: 1.2rem;
+    letter-spacing: 0.5rem;
+  }
+
+  .toc {
+    max-width: var(--max-width);
+    margin: 0 auto 3rem;
+    padding: 1.5rem 2rem;
+    background: var(--bg-alt);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+  }
+
+  .toc h2 {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .toc ol { list-style: none; counter-reset: toc; padding: 0; }
+  .toc li { counter-increment: toc; margin-bottom: 0.4rem; }
+
+  .toc li::before {
+    content: counter(toc) ".";
+    color: var(--accent);
+    font-weight: 600;
+    margin-right: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .toc a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+
+  .toc a:hover { border-bottom-color: var(--accent); }
+
+  .study-content {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .study-section { margin-bottom: 3.5rem; }
+
+  .section-heading {
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .section-number {
+    color: var(--accent);
+    font-weight: 700;
+    margin-right: 0.3rem;
+  }
+
+  .drop-cap::first-letter {
+    float: left;
+    font-size: 3.5em;
+    line-height: 0.8;
+    padding-right: 0.08em;
+    padding-top: 0.07em;
+    color: var(--drop-cap);
+    font-weight: 400;
+  }
+
+  .scripture-block {
+    background: var(--bg-scripture);
+    border-left: 3px solid var(--accent);
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .scripture-block .verse-text {
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-scripture);
+  }
+
+  .scripture-block .verse-ref {
+    display: block;
+    margin-top: 0.5rem;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--accent);
+  }
+
+  .scripture-block .verse-ref a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--accent);
+  }
+
+  .scripture-block .verse-ref a:hover { border-bottom-style: solid; }
+
+  .scripture-ref {
+    color: var(--link);
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 1px dotted var(--link);
+    white-space: nowrap;
+  }
+
+  .scripture-ref:hover {
+    color: var(--link-hover);
+    border-bottom-style: solid;
+  }
+
+  .verse-expand {
+    margin: 1rem 0;
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .verse-expand summary {
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    background: var(--bg-alt);
+    color: var(--text);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .verse-expand summary::before {
+    content: "\25B8";
+    font-size: 0.7rem;
+    color: var(--accent);
+    transition: transform 0.2s;
+  }
+
+  .verse-expand[open] summary::before { transform: rotate(90deg); }
+
+  .verse-expand .expand-content {
+    padding: 1rem 1.25rem;
+    font-size: 0.92rem;
+    color: var(--text-scripture);
+    font-style: italic;
+    line-height: 1.7;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .verse-expand .expand-note {
+    font-style: normal;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .biblical-placement {
+    background: var(--bg-aside);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+
+  .biblical-placement .aside-label {
+    font-family: var(--font-sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .study-content p { margin-bottom: 1rem; }
+  .study-content strong { font-weight: 700; color: var(--text); }
+
+  .closing-thought {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    margin: 3rem 0;
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .closing-thought h2 {
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+
+  .closing-thought p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    max-width: 540px;
+    margin: 0 auto 0.75rem;
+  }
+
+  .scripture-index {
+    max-width: var(--max-width);
+    margin: 3rem auto;
+    padding: 2rem 1.5rem;
+    border-top: 2px solid var(--border);
+  }
+
+  .scripture-index h2 {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .index-columns {
+    columns: 2;
+    column-gap: 2rem;
+    font-size: 0.85rem;
+  }
+
+  .index-entry {
+    break-inside: avoid;
+    margin-bottom: 0.3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .index-entry a {
+    color: var(--link);
+    text-decoration: none;
+  }
+
+  .index-entry a:hover { color: var(--link-hover); }
+
+  .index-section {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-family: var(--font-sans);
+    margin-left: 0.5rem;
+  }
+
+  .study-footer {
+    max-width: var(--max-width);
+    margin: 3rem auto;
+    padding: 1.5rem;
+    text-align: center;
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-light);
+  }
+
+  .study-footer a { color: var(--link); text-decoration: none; }
+
+  @media (max-width: 600px) {
+    html { font-size: 16px; }
+    .study-title { font-size: 1.8rem; }
+    .section-heading { font-size: 1.2rem; }
+    .index-columns { columns: 1; }
+    .study-header { margin-top: 2rem; }
+    .top-bar { padding: 0.5rem 1rem; }
+  }
+
+  @media print {
+    .top-bar, .theme-toggle, .translation-select { display: none; }
+    body { background: white; color: black; font-size: 11pt; }
+    .scripture-block { border-left-color: #666; background: #f5f5f5; }
+    .study-header { margin-top: 0; }
+    .verse-expand { break-inside: avoid; }
+    .verse-expand[open] .expand-content { display: block; }
+    a { color: inherit; text-decoration: none; }
+    .scripture-ref { border-bottom: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-bar-left">
+    <a href="index.html" class="logo">Berean Study</a>
+  </div>
+  <div class="top-bar-right">
+    <select class="translation-select" id="translationSelect" aria-label="Bible translation">
+      <option value="esv">ESV</option>
+      <option value="nkjv">NKJV</option>
+      <option value="kjv">KJV</option>
+      <option value="nasb20">NASB</option>
+      <option value="niv">NIV</option>
+      <option value="nlt">NLT</option>
+    </select>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">&#9684;</button>
+  </div>
+</div>
+
+<header class="study-header">
+  <div class="study-meta">
+    <span class="source">Fearless House</span>
+    <span class="divider">&middot;</span>
+    <span class="date">March 29, 2026</span>
+    <span class="divider">&middot;</span>
+    <span class="series">You've Heard It Said &middot; Part 3</span>
+  </div>
+  <h1 class="study-title">Gardens &amp; a Cross</h1>
+  <p class="study-subtitle">Failure, Surrender, and Restored Authority</p>
+  <nav class="series-nav">
+    <a href="2026-03-22-youve-heard-it-said-pt2.html">&larr; Part 2: Belief Is Not Enough</a>
+  </nav>
+</header>
+
+<div class="divider-ornament">&#10022; &#10022; &#10022;</div>
+
+<nav class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#section-intro">Introduction: Relationship, Not Control</a></li>
+    <li><a href="#section-1">The First Garden: Failure</a></li>
+    <li><a href="#section-2">The Second Garden: Surrender</a></li>
+    <li><a href="#section-3">The Cross Restores Authority</a></li>
+  </ol>
+</nav>
+
+<main class="study-content">
+
+  <!-- ══════════ Introduction ══════════ -->
+  <section class="study-section" id="section-intro">
+    <h2 class="section-heading">Introduction: Relationship, Not Control</h2>
+
+    <p class="drop-cap">The Bible begins in a garden. Humanity falls in a garden. And redemption begins in another garden. Between the two stands a cross. The first garden shows the failure of man; the second garden shows the obedience of Christ. These three scenes&mdash;Eden, Gethsemane, and Golgotha&mdash;are not unrelated stories. They are one story in three movements, and the theme is ownership.</p>
+
+    <div class="scripture-block">
+      <p class="verse-text">"No longer do I call you servants, for the servant does not know what his master is doing; but I have called you friends, for all that I have heard from my Father I have made known to you."</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/jhn/15/15/" class="scripture-ref" data-book="jhn" data-chapter="15" data-verse="15" target="_blank" rel="noopener">John 15:15</a></span>
+    </div>
+
+    <p>Jesus is speaking the night before the cross. He draws a sharp line: He is not pursuing servants. Servants do what they are told without knowing why. Friends are let in on the plan. The move from servant to friend is the move from compliance to ownership. <strong>God's goal has always been relationship, not control.</strong></p>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/gen/3/8/" class="scripture-ref" data-book="gen" data-chapter="3" data-verse="8" target="_blank" rel="noopener">Genesis 3:8</a></summary>
+      <div class="expand-content">"And they heard the sound of the Lord God walking in the garden in the cool of the day, and the man and his wife hid themselves from the presence of the Lord God among the trees of the garden."</div>
+      <p class="expand-note">Before the fall, God walking in the garden was normal. The friendship was built in. Sin is what broke the walk, not distance.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/exo/33/11/" class="scripture-ref" data-book="exo" data-chapter="33" data-verse="11" target="_blank" rel="noopener">Exodus 33:11</a></summary>
+      <div class="expand-content">"Thus the Lord used to speak to Moses face to face, as a man speaks to his friend."</div>
+      <p class="expand-note">Moses is the first person after the fall whom Scripture explicitly calls a friend of God. It happens inside the tent of meeting&mdash;a movable garden of sorts, a place of direct relationship.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/jas/2/23/" class="scripture-ref" data-book="jas" data-chapter="2" data-verse="23" target="_blank" rel="noopener">James 2:23</a></summary>
+      <div class="expand-content">"And the Scripture was fulfilled that says, 'Abraham believed God, and it was counted to him as righteousness'&mdash;and he was called a friend of God."</div>
+      <p class="expand-note">James ties friendship with God directly to owned faith. Abraham's belief wasn't abstract; it was lived out&mdash;so he was called a friend.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/amo/3/7/" class="scripture-ref" data-book="amo" data-chapter="3" data-verse="7" target="_blank" rel="noopener">Amos 3:7</a></summary>
+      <div class="expand-content">"For the Lord God does nothing without revealing his secret to his servants the prophets."</div>
+      <p class="expand-note">Even the prophets, whom Amos calls servants, are treated as insiders. God's pattern is to reveal, not to withhold. The whole Bible is God refusing to keep His people in the dark.</p>
+    </details>
+
+    <div class="biblical-placement">
+      <p class="aside-label">Biblical Placement</p>
+      <p>John 15 sits inside the Upper Room Discourse (<a href="https://www.blueletterbible.org/esv/jhn/13/1/" class="scripture-ref" data-book="jhn" data-chapter="13" data-verse="1" target="_blank" rel="noopener">John 13&ndash;17</a>)&mdash;Jesus' last extended teaching before His arrest. Hours before Gethsemane, He redefines the relationship: not master and servant, but vine and branches, friend to friend. Everything that follows in the sermon&mdash;the failure at Eden, the surrender at Gethsemane, the authority restored at the cross&mdash;is framed by this word: <em>friend</em>. God's design has never been a transaction. It has always been a shared life.</p>
+    </div>
+  </section>
+
+  <!-- ══════════ Section 1 — First Garden ══════════ -->
+  <section class="study-section" id="section-1">
+    <h2 class="section-heading"><span class="section-number">1.</span> The First Garden: Failure</h2>
+
+    <div class="scripture-block">
+      <p class="verse-text">"So when the woman saw that the tree was good for food, and that it was a delight to the eyes, and that the tree was to be desired to make one wise, she took of its fruit and ate, and she also gave some to her husband who was with her, and he ate."</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/gen/3/6/" class="scripture-ref" data-book="gen" data-chapter="3" data-verse="6" target="_blank" rel="noopener">Genesis 3:6</a></span>
+    </div>
+
+    <p class="drop-cap">Eden was not a place of scarcity. Adam and Eve had everything they needed&mdash;truth, authority, and unbroken relationship with God. They did not fall because God withheld something from them. They fell because they refused to govern themselves by the truth they already had. The tragedy of Eden is not that they were ignorant. The tragedy is that they knew.</p>
+
+    <p>The sermon's first point names what was given and what was squandered: <strong>Adam and Eve had truth, authority, and relationship with God&mdash;but they failed to govern themselves.</strong> They believed God existed. They just didn't own His word deeply enough to let it shape their choice in the one moment when it cost something.</p>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/gen/1/26/" class="scripture-ref" data-book="gen" data-chapter="1" data-verse="26" target="_blank" rel="noopener">Genesis 1:26-28</a></summary>
+      <div class="expand-content">"Then God said, 'Let us make man in our image, after our likeness. And let them have dominion over the fish of the sea and over the birds of the heavens and over the livestock and over all the earth and over every creeping thing that creeps on the earth.' ... And God blessed them. And God said to them, 'Be fruitful and multiply and fill the earth and subdue it and have dominion.'"</div>
+      <p class="expand-note">Authority was given first. Before there was any command to obey, there was a delegated reign. The fall wasn't a loss of a job Adam never had&mdash;it was abdication from a crown he was wearing.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/gen/2/15/" class="scripture-ref" data-book="gen" data-chapter="2" data-verse="15" target="_blank" rel="noopener">Genesis 2:15-17</a></summary>
+      <div class="expand-content">"The Lord God took the man and put him in the garden of Eden to work it and keep it. And the Lord God commanded the man, saying, 'You may surely eat of every tree of the garden, but of the tree of the knowledge of good and evil you shall not eat, for in the day that you eat of it you shall surely die.'"</div>
+      <p class="expand-note">The Hebrew verb for "keep" (<em>shamar</em>) is the same word used later for priests guarding the tabernacle. Adam was not just a farmer&mdash;he was a guardian. The serpent entered a space Adam was supposed to be defending.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/rom/5/12/" class="scripture-ref" data-book="rom" data-chapter="5" data-verse="12" target="_blank" rel="noopener">Romans 5:12</a></summary>
+      <div class="expand-content">"Therefore, just as sin came into the world through one man, and death through sin, and so death spread to all men because all sinned."</div>
+      <p class="expand-note">Paul treats Adam not as a private story but as a federal head. When Adam failed to govern himself, the consequence ran through all his children. Ownership&mdash;or the lack of it&mdash;is never only personal.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/1co/15/21/" class="scripture-ref" data-book="1co" data-chapter="15" data-verse="21" target="_blank" rel="noopener">1 Corinthians 15:21-22</a></summary>
+      <div class="expand-content">"For as by a man came death, by a man has come also the resurrection of the dead. For as in Adam all die, so also in Christ shall all be made alive."</div>
+      <p class="expand-note">Paul sets up the "two Adams" framework that the entire sermon hinges on. The same category of creature (man) who lost the world in a garden is the one who wins it back in another garden.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/isa/53/6/" class="scripture-ref" data-book="isa" data-chapter="53" data-verse="6" target="_blank" rel="noopener">Isaiah 53:6</a></summary>
+      <div class="expand-content">"All we like sheep have gone astray; we have turned&mdash;every one&mdash;to his own way; and the Lord has laid on him the iniquity of us all."</div>
+      <p class="expand-note">Isaiah diagnoses the Eden pattern across all of humanity: each of us turned to <em>our own way</em>. That phrase&mdash;"his own way"&mdash;is the essence of ungoverned authority. Freedom without ownership just becomes self-worship.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/hos/6/7/" class="scripture-ref" data-book="hos" data-chapter="6" data-verse="7" target="_blank" rel="noopener">Hosea 6:7</a></summary>
+      <div class="expand-content">"But like Adam they transgressed the covenant; there they dealt faithlessly with me."</div>
+      <p class="expand-note">Hosea calls Eden a <em>covenant</em>, not just a rule. That's key. Covenants are relational frameworks&mdash;you keep them because you love the other party, not because you're afraid of the penalty. Adam and Eve broke a covenant of friendship, not merely a law.</p>
+    </details>
+
+    <div class="biblical-placement">
+      <p class="aside-label">Biblical Placement</p>
+      <p>Genesis 3 is the hinge of the entire biblical story. Everything before it is the blueprint for how humanity was meant to live: image-bearers reigning under God's authority inside a place of flourishing. Everything after it is the long, patient unwinding of what broke in those few verses. Prophets, priests, kings, sacrifices, the Law, the Temple&mdash;all of it is pointing forward to a second Adam who will succeed exactly where the first one failed.</p>
+    </div>
+  </section>
+
+  <!-- ══════════ Section 2 — Second Garden ══════════ -->
+  <section class="study-section" id="section-2">
+    <h2 class="section-heading"><span class="section-number">2.</span> The Second Garden: Surrender</h2>
+
+    <div class="scripture-block">
+      <p class="verse-text">"Father, if you are willing, remove this cup from me. Nevertheless, not my will, but yours, be done."</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/luk/22/42/" class="scripture-ref" data-book="luk" data-chapter="22" data-verse="42" target="_blank" rel="noopener">Luke 22:42</a></span>
+    </div>
+
+    <p class="drop-cap">Gethsemane means "oil press." It is where olives were crushed to release their oil&mdash;and it is where Jesus, the Anointed One, was crushed under the weight of what He was about to drink. The first garden ended with a reach for a tree. The second garden ended with a walk toward one. Where Adam chose his will over the Father's, Jesus chose the Father's will over His own.</p>
+
+    <p>The sermon points to the exact inversion. <strong>The first Adam reached for a tree; the second Adam walked toward a cross.</strong> Same kind of creature, same kind of garden, same kind of moment where everything hung on one choice&mdash;and opposite outcomes. Gethsemane is Eden replayed, and this time man gets it right.</p>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/mat/26/36/" class="scripture-ref" data-book="mat" data-chapter="26" data-verse="36" target="_blank" rel="noopener">Matthew 26:36-39</a></summary>
+      <div class="expand-content">"Then Jesus went with them to a place called Gethsemane, and he said to his disciples, 'Sit here, while I go over there and pray.' And taking with him Peter and the two sons of Zebedee, he began to be sorrowful and troubled. Then he said to them, 'My soul is very sorrowful, even to death; remain here, and watch with me.' And going a little farther he fell on his face and prayed, saying, 'My Father, if it be possible, let this cup pass from me; nevertheless, not as I will, but as you will.'"</div>
+      <p class="expand-note">Matthew's account shows how visceral this was. Jesus was not performing obedience. He was agonizing through it. "Sorrowful, even to death" is not poetry. Ownership of the Father's will cost Him everything He had before it cost Him His life.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/luk/22/44/" class="scripture-ref" data-book="luk" data-chapter="22" data-verse="44" target="_blank" rel="noopener">Luke 22:43-44</a></summary>
+      <div class="expand-content">"And there appeared to him an angel from heaven, strengthening him. And being in an agony he prayed more earnestly; and his sweat became like great drops of blood falling down to the ground."</div>
+      <p class="expand-note">Only Luke, the physician, records the sweat like blood. The medical term is <em>hematidrosis</em>&mdash;a rare condition where capillaries burst under extreme stress. Luke is telling us that the surrender in this garden was physically costing Jesus something even before the soldiers arrived.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/heb/5/7/" class="scripture-ref" data-book="heb" data-chapter="5" data-verse="7" target="_blank" rel="noopener">Hebrews 5:7-9</a></summary>
+      <div class="expand-content">"In the days of his flesh, Jesus offered up prayers and supplications, with loud cries and tears, to him who was able to save him from death, and he was heard because of his reverence. Although he was a son, he learned obedience through what he suffered. And being made perfect, he became the source of eternal salvation to all who obey him."</div>
+      <p class="expand-note">Hebrews says Jesus <em>learned</em> obedience. Not that He needed correction&mdash;He never sinned&mdash;but that He experienced obedience in the only way anyone truly can: by walking through a moment where saying yes cost something real. Gethsemane was the classroom.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/jhn/10/17/" class="scripture-ref" data-book="jhn" data-chapter="10" data-verse="17" target="_blank" rel="noopener">John 10:17-18</a></summary>
+      <div class="expand-content">"For this reason the Father loves me, because I lay down my life that I may take it up again. No one takes it from me, but I lay it down of my own accord. I have authority to lay it down, and I have authority to take it up again."</div>
+      <p class="expand-note">Jesus is not being captured in Gethsemane&mdash;He is freely laying Himself down. The Roman soldiers a few verses later need Him to identify Himself. He has authority the whole time, and He surrenders it on purpose.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/phl/2/5/" class="scripture-ref" data-book="phl" data-chapter="2" data-verse="5" target="_blank" rel="noopener">Philippians 2:5-8</a></summary>
+      <div class="expand-content">"Have this mind among yourselves, which is yours in Christ Jesus, who, though he was in the form of God, did not count equality with God a thing to be grasped, but emptied himself, by taking the form of a servant, being born in the likeness of men. And being found in human form, he humbled himself by becoming obedient to the point of death, even death on a cross."</div>
+      <p class="expand-note">Paul's deliberate echo of Eden is unmistakable. In Eden, humanity <em>grasped</em> at being like God. In Gethsemane, the One who actually <em>was</em> God did not grasp&mdash;He emptied. The cure for Adam's grasping is Christ's releasing.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/isa/53/7/" class="scripture-ref" data-book="isa" data-chapter="53" data-verse="7" target="_blank" rel="noopener">Isaiah 53:7</a></summary>
+      <div class="expand-content">"He was oppressed, and he was afflicted, yet he opened not his mouth; like a lamb that is led to the slaughter, and like a sheep that before its shearers is silent, so he opened not his mouth."</div>
+      <p class="expand-note">Isaiah prophesies this seven centuries early. Silent submission was the posture the Messiah would take&mdash;not because He had nothing to say, but because He had already said it in the garden the night before.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/rom/5/19/" class="scripture-ref" data-book="rom" data-chapter="5" data-verse="19" target="_blank" rel="noopener">Romans 5:19</a></summary>
+      <div class="expand-content">"For as by the one man's disobedience the many were made sinners, so by the one man's obedience the many will be made righteous."</div>
+      <p class="expand-note">Paul's single-sentence summary of the two gardens. One man's disobedience broke us. One man's obedience remade us. Gethsemane is where the one man's obedience was crystallized.</p>
+    </details>
+
+    <div class="biblical-placement">
+      <p class="aside-label">Biblical Placement</p>
+      <p>Gethsemane sits between the Last Supper and the arrest. Jesus has just finished the Passover meal and walked across the Kidron valley (<a href="https://www.blueletterbible.org/esv/jhn/18/1/" class="scripture-ref" data-book="jhn" data-chapter="18" data-verse="1" target="_blank" rel="noopener">John 18:1</a>)&mdash;the same valley David crossed weeping when his own son Absalom betrayed him. Jesus enters a garden to surrender His will; Absalom's story was a foreshadow of a son lost to rebellion. In Gethsemane, the true Son chooses the opposite path, and the Father's kingdom is secured by the Son's willing obedience rather than lost by the father's grief.</p>
+    </div>
+  </section>
+
+  <!-- ══════════ Section 3 — Cross Restores Authority ══════════ -->
+  <section class="study-section" id="section-3">
+    <h2 class="section-heading"><span class="section-number">3.</span> The Cross Restores Authority</h2>
+
+    <div class="scripture-block">
+      <p class="verse-text">"And Jesus came and said to them, 'All authority in heaven and on earth has been given to me.'"</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/mat/28/18/" class="scripture-ref" data-book="mat" data-chapter="28" data-verse="18" target="_blank" rel="noopener">Matthew 28:18</a></span>
+    </div>
+
+    <p class="drop-cap">After the resurrection, Jesus says something that would be blasphemy from anyone else: all authority&mdash;<em>all</em> of it&mdash;in heaven and on earth has been given to Him. This is not a poetic flourish. It is a legal declaration. The title deed to creation, which Adam forfeited in Eden, has been restored&mdash;and placed in the hands of the man who refused to grasp at it. What humanity lost in the first garden, Christ won back through the cross.</p>
+
+    <p>The sermon lands here: <strong>He now invites us not just to follow Him, but to share His mission.</strong> Authority restored is not hoarded. It is delegated again&mdash;this time into hands that have been taught to say "not my will." The pattern of friendship returns: Jesus is sending servants who have been made friends, who have been made co-heirs, who have been made a royal priesthood.</p>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/col/2/15/" class="scripture-ref" data-book="col" data-chapter="2" data-verse="15" target="_blank" rel="noopener">Colossians 2:13-15</a></summary>
+      <div class="expand-content">"And you, who were dead in your trespasses ... God made alive together with him, having forgiven us all our trespasses, by canceling the record of debt that stood against us with its legal demands. This he set aside, nailing it to the cross. He disarmed the rulers and authorities and put them to open shame, by triumphing over them in him."</div>
+      <p class="expand-note">Paul describes the cross as a public military triumph. The rival powers that had claimed the earth after Eden were <em>disarmed</em>&mdash;stripped of their legitimacy&mdash;at Calvary. What looked like defeat was a parade of victory.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/eph/1/19/" class="scripture-ref" data-book="eph" data-chapter="1" data-verse="19" target="_blank" rel="noopener">Ephesians 1:19-23</a></summary>
+      <div class="expand-content">"...according to the working of his great might that he worked in Christ when he raised him from the dead and seated him at his right hand in the heavenly places, far above all rule and authority and power and dominion, and above every name that is named, not only in this age but also in the one to come. And he put all things under his feet and gave him as head over all things to the church, which is his body, the fullness of him who fills all in all."</div>
+      <p class="expand-note">Paul uses the exact language of Psalm 8 ("all things under his feet")&mdash;a Psalm originally about the dominion given to humanity in Eden. The same dominion, now placed under the feet of a resurrected human: Jesus. What was lost through a man is restored through a Man.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/heb/2/8/" class="scripture-ref" data-book="heb" data-chapter="2" data-verse="8" target="_blank" rel="noopener">Hebrews 2:8-9</a></summary>
+      <div class="expand-content">"Now in putting everything in subjection to him, he left nothing outside his control. At present, we do not yet see everything in subjection to him. But we see him who for a little while was made lower than the angels, namely Jesus, crowned with glory and honor because of the suffering of death."</div>
+      <p class="expand-note">Hebrews admits the tension: we don't yet see full restoration. But we <em>do</em> see Jesus crowned. The victory is real even when the final outworking is still in progress. Christ is the guarantee of what Eden's reversal looks like in the end.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/rev/5/9/" class="scripture-ref" data-book="rev" data-chapter="5" data-verse="9" target="_blank" rel="noopener">Revelation 5:9-10</a></summary>
+      <div class="expand-content">"And they sang a new song, saying, 'Worthy are you to take the scroll and to open its seals, for you were slain, and by your blood you ransomed people for God from every tribe and language and people and nation, and you have made them a kingdom and priests to our God, and they shall reign on the earth.'"</div>
+      <p class="expand-note">In John's throne-room vision, the saints sing that the slain Lamb has made them <em>kings and priests</em>&mdash;exactly the dual role Adam was given in Eden. The restoration is not a smaller version of the original. It is the original, extended to every nation.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/rom/8/17/" class="scripture-ref" data-book="rom" data-chapter="8" data-verse="17" target="_blank" rel="noopener">Romans 8:16-17</a></summary>
+      <div class="expand-content">"The Spirit himself bears witness with our spirit that we are children of God, and if children, then heirs&mdash;heirs of God and fellow heirs with Christ, provided we suffer with him in order that we may also be glorified with him."</div>
+      <p class="expand-note">"Fellow heirs" is the legal term. Christ's inheritance is not just for Him&mdash;those joined to Him inherit with Him. The authority He won at the cross is shared authority.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/luk/10/19/" class="scripture-ref" data-book="luk" data-chapter="10" data-verse="19" target="_blank" rel="noopener">Luke 10:19</a></summary>
+      <div class="expand-content">"Behold, I have given you authority to tread on serpents and scorpions, and over all the power of the enemy, and nothing shall hurt you."</div>
+      <p class="expand-note">The serpent from Genesis 3 reappears here&mdash;and this time the sons and daughters of the second Adam walk <em>over</em> him rather than listen <em>to</em> him. Jesus is not just announcing authority; He is distributing it.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/1pe/2/9/" class="scripture-ref" data-book="1pe" data-chapter="2" data-verse="9" target="_blank" rel="noopener">1 Peter 2:9</a></summary>
+      <div class="expand-content">"But you are a chosen race, a royal priesthood, a holy nation, a people for his own possession, that you may proclaim the excellencies of him who called you out of darkness into his marvelous light."</div>
+      <p class="expand-note">Peter uses Old Testament priest-king language for the church. The vocation Adam walked away from in Eden is now the identity of those who are in Christ. The invitation to share His mission is not metaphor&mdash;it is office.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/mat/28/19/" class="scripture-ref" data-book="mat" data-chapter="28" data-verse="19" target="_blank" rel="noopener">Matthew 28:19-20</a></summary>
+      <div class="expand-content">"Go therefore and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit, teaching them to observe all that I have commanded you. And behold, I am with you always, to the end of the age."</div>
+      <p class="expand-note">Notice the word "therefore." Authority, then mission. Because <em>all</em> authority is His, He can send us anywhere. And He goes with us&mdash;the friendship of Eden is not just restored, it is extended to the whole earth.</p>
+    </details>
+
+    <div class="biblical-placement">
+      <p class="aside-label">Biblical Placement</p>
+      <p>Matthew ends his gospel here, on a mountain in Galilee, with Jesus speaking words that only make sense in the context of the whole biblical story. Adam was commissioned on the earth with dominion; Jesus is commissioned on a mountain with <em>all</em> authority. Moses received the Law on a mountain; Jesus gives the Great Commission on a mountain. Mountains in Scripture are places where heaven and earth meet, and Matthew deliberately stages his final scene on one. The sermon on a mountain opened Matthew's gospel (<a href="https://www.blueletterbible.org/esv/mat/5/1/" class="scripture-ref" data-book="mat" data-chapter="5" data-verse="1" target="_blank" rel="noopener">Matthew 5:1</a>); the commission on a mountain closes it. Authority given&mdash;and shared.</p>
+    </div>
+  </section>
+
+  <!-- ══════════ Closing ══════════ -->
+  <section class="closing-thought">
+    <h2>Closing</h2>
+    <p>Humanity lost the world in a garden because man would not govern himself.</p>
+    <p>Jesus redeemed the world in a garden because He governed Himself completely.</p>
+    <p>And Easter invites us not just to believe in Christ&hellip;</p>
+    <p><strong>but to live under His authority.</strong></p>
+  </section>
+
+  <!-- ══════════ The Two Adams ══════════ -->
+  <section class="study-section" id="section-two-adams">
+    <h2 class="section-heading">The Two Adams</h2>
+
+    <p>The sermon's architecture is the two-Adam structure Paul makes explicit in <a href="https://www.blueletterbible.org/esv/rom/5/12/" class="scripture-ref" data-book="rom" data-chapter="5" data-verse="12" target="_blank" rel="noopener">Romans 5</a> and <a href="https://www.blueletterbible.org/esv/1co/15/20/" class="scripture-ref" data-book="1co" data-chapter="15" data-verse="20" target="_blank" rel="noopener">1 Corinthians 15</a>. It is worth laying out the parallel in full.</p>
+
+    <div class="scripture-block">
+      <p class="verse-text">"Thus it is written, 'The first man Adam became a living being'; the last Adam became a life-giving spirit."</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/1co/15/45/" class="scripture-ref" data-book="1co" data-chapter="15" data-verse="45" target="_blank" rel="noopener">1 Corinthians 15:45</a></span>
+    </div>
+
+    <p><strong>First Adam:</strong> Placed in a garden of life. Given truth, authority, and friendship with God. Tested under a tree. Chose his will. Became a source of death for his children.</p>
+
+    <p><strong>Last Adam:</strong> Entered a garden of agony. Already possessing all authority. Tested before a cross. Chose the Father's will. Became a source of life for all who are joined to Him.</p>
+
+    <div class="scripture-block">
+      <p class="verse-text">"For as in Adam all die, so also in Christ shall all be made alive."</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/1co/15/22/" class="scripture-ref" data-book="1co" data-chapter="15" data-verse="22" target="_blank" rel="noopener">1 Corinthians 15:22</a></span>
+    </div>
+
+    <p>This is why Paul can say there are only two humanities in the end&mdash;two families, two federal heads. You are either still inside the first Adam's story, sharing his failure by default, or you have been grafted into the second Adam's story, sharing His obedience by grace. The gospel is not an upgrade to the first Adam's project. It is admission into a new humanity.</p>
+
+    <div class="biblical-placement">
+      <p class="aside-label">Biblical Placement</p>
+      <p>Paul is writing 1 Corinthians 15 to address Greek skepticism about bodily resurrection. His argument is not philosophical but historical: if Christ was not raised, the whole Christian claim collapses. If He was raised, then the last Adam has reversed what the first Adam did&mdash;and the restoration of the world is already underway. The empty tomb is Eden's answer.</p>
+    </div>
+  </section>
+
+  <!-- ══════════ The Arc ══════════ -->
+  <section class="study-section" id="section-arc">
+    <h2 class="section-heading">The Arc of the Series</h2>
+
+    <p>Three weeks, three movements. The series has been tracing one question from different angles: what does it look like when God's truth moves from something you hear to something you live?</p>
+
+    <p><strong>Part 1 &mdash; Ownership of Truth:</strong> Jesus wanted people to discover truth for themselves. Borrowed belief is fragile; owned revelation is strong. God is after relationship, not forced agreement.</p>
+
+    <p><strong>Part 2 &mdash; <a href="2026-03-22-youve-heard-it-said-pt2.html">Belief Is Not Enough</a>:</strong> Even demons believe. Adam and Eve knew. The test isn't whether you hold the truth in your head&mdash;it's whether faith moves into action, the way it did in Gethsemane.</p>
+
+    <p><strong>Part 3 &mdash; Gardens &amp; a Cross:</strong> The whole biblical story is told in two gardens. The first showed what happens when a man with truth, authority, and friendship fails to own it. The second showed what happens when a Man with the same gifts owns it completely. The cross between them is how the second restores what the first lost&mdash;and invites us into the restored authority as friends, not servants.</p>
+
+    <div class="scripture-block">
+      <p class="verse-text">"Therefore, as one trespass led to condemnation for all men, so one act of righteousness leads to justification and life for all men. For as by the one man's disobedience the many were made sinners, so by the one man's obedience the many will be made righteous."</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/rom/5/18/" class="scripture-ref" data-book="rom" data-chapter="5" data-verse="18" target="_blank" rel="noopener">Romans 5:18-19</a></span>
+    </div>
+
+    <p>The series began with <em>truth revealed</em> and ends with <em>authority restored</em>. In between is the long work of ownership&mdash;letting what you believe become what you live, until your life is not your own, and that turns out to be the only real freedom.</p>
+
+    <div class="scripture-block">
+      <p class="verse-text">"I have been crucified with Christ. It is no longer I who live, but Christ who lives in me. And the life I now live in the flesh I live by faith in the Son of God, who loved me and gave himself for me."</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/gal/2/20/" class="scripture-ref" data-book="gal" data-chapter="2" data-verse="20" target="_blank" rel="noopener">Galatians 2:20</a></span>
+    </div>
+
+    <p>Paul's single sentence is the lived-out version of all three parts. Truth owned, belief acted, authority surrendered. The first Adam reached for a tree to become like God. The second Adam walked toward one because He already was. Paul says: join the walk.</p>
+  </section>
+
+</main>
+
+<!-- ══════════ Scripture Index ══════════ -->
+<section class="scripture-index">
+  <h2>Scripture Index</h2>
+  <div class="index-columns">
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/gen/1/26/" class="scripture-ref" data-book="gen" data-chapter="1" data-verse="26" target="_blank" rel="noopener">Genesis 1:26-28</a>
+      <span class="index-section"><a href="#section-1">&sect;1</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/gen/2/15/" class="scripture-ref" data-book="gen" data-chapter="2" data-verse="15" target="_blank" rel="noopener">Genesis 2:15-17</a>
+      <span class="index-section"><a href="#section-1">&sect;1</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/gen/3/6/" class="scripture-ref" data-book="gen" data-chapter="3" data-verse="6" target="_blank" rel="noopener">Genesis 3:6</a>
+      <span class="index-section"><a href="#section-1">&sect;1</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/gen/3/8/" class="scripture-ref" data-book="gen" data-chapter="3" data-verse="8" target="_blank" rel="noopener">Genesis 3:8</a>
+      <span class="index-section"><a href="#section-intro">Intro</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/exo/33/11/" class="scripture-ref" data-book="exo" data-chapter="33" data-verse="11" target="_blank" rel="noopener">Exodus 33:11</a>
+      <span class="index-section"><a href="#section-intro">Intro</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/isa/53/6/" class="scripture-ref" data-book="isa" data-chapter="53" data-verse="6" target="_blank" rel="noopener">Isaiah 53:6</a>
+      <span class="index-section"><a href="#section-1">&sect;1</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/isa/53/7/" class="scripture-ref" data-book="isa" data-chapter="53" data-verse="7" target="_blank" rel="noopener">Isaiah 53:7</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/hos/6/7/" class="scripture-ref" data-book="hos" data-chapter="6" data-verse="7" target="_blank" rel="noopener">Hosea 6:7</a>
+      <span class="index-section"><a href="#section-1">&sect;1</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/amo/3/7/" class="scripture-ref" data-book="amo" data-chapter="3" data-verse="7" target="_blank" rel="noopener">Amos 3:7</a>
+      <span class="index-section"><a href="#section-intro">Intro</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/mat/5/1/" class="scripture-ref" data-book="mat" data-chapter="5" data-verse="1" target="_blank" rel="noopener">Matthew 5:1</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/mat/26/36/" class="scripture-ref" data-book="mat" data-chapter="26" data-verse="36" target="_blank" rel="noopener">Matthew 26:36-39</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/mat/28/18/" class="scripture-ref" data-book="mat" data-chapter="28" data-verse="18" target="_blank" rel="noopener">Matthew 28:18</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/mat/28/19/" class="scripture-ref" data-book="mat" data-chapter="28" data-verse="19" target="_blank" rel="noopener">Matthew 28:19-20</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/luk/10/19/" class="scripture-ref" data-book="luk" data-chapter="10" data-verse="19" target="_blank" rel="noopener">Luke 10:19</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/luk/22/42/" class="scripture-ref" data-book="luk" data-chapter="22" data-verse="42" target="_blank" rel="noopener">Luke 22:42</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/luk/22/44/" class="scripture-ref" data-book="luk" data-chapter="22" data-verse="44" target="_blank" rel="noopener">Luke 22:43-44</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/jhn/10/17/" class="scripture-ref" data-book="jhn" data-chapter="10" data-verse="17" target="_blank" rel="noopener">John 10:17-18</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/jhn/15/15/" class="scripture-ref" data-book="jhn" data-chapter="15" data-verse="15" target="_blank" rel="noopener">John 15:15</a>
+      <span class="index-section"><a href="#section-intro">Intro</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/jhn/18/1/" class="scripture-ref" data-book="jhn" data-chapter="18" data-verse="1" target="_blank" rel="noopener">John 18:1</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/rom/5/12/" class="scripture-ref" data-book="rom" data-chapter="5" data-verse="12" target="_blank" rel="noopener">Romans 5:12</a>
+      <span class="index-section"><a href="#section-1">&sect;1</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/rom/5/18/" class="scripture-ref" data-book="rom" data-chapter="5" data-verse="18" target="_blank" rel="noopener">Romans 5:18-19</a>
+      <span class="index-section"><a href="#section-arc">Arc</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/rom/5/19/" class="scripture-ref" data-book="rom" data-chapter="5" data-verse="19" target="_blank" rel="noopener">Romans 5:19</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/rom/8/17/" class="scripture-ref" data-book="rom" data-chapter="8" data-verse="17" target="_blank" rel="noopener">Romans 8:16-17</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/1co/15/21/" class="scripture-ref" data-book="1co" data-chapter="15" data-verse="21" target="_blank" rel="noopener">1 Corinthians 15:21-22</a>
+      <span class="index-section"><a href="#section-1">&sect;1</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/1co/15/22/" class="scripture-ref" data-book="1co" data-chapter="15" data-verse="22" target="_blank" rel="noopener">1 Corinthians 15:22</a>
+      <span class="index-section"><a href="#section-two-adams">Two Adams</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/1co/15/45/" class="scripture-ref" data-book="1co" data-chapter="15" data-verse="45" target="_blank" rel="noopener">1 Corinthians 15:45</a>
+      <span class="index-section"><a href="#section-two-adams">Two Adams</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/gal/2/20/" class="scripture-ref" data-book="gal" data-chapter="2" data-verse="20" target="_blank" rel="noopener">Galatians 2:20</a>
+      <span class="index-section"><a href="#section-arc">Arc</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/eph/1/19/" class="scripture-ref" data-book="eph" data-chapter="1" data-verse="19" target="_blank" rel="noopener">Ephesians 1:19-23</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/phl/2/5/" class="scripture-ref" data-book="phl" data-chapter="2" data-verse="5" target="_blank" rel="noopener">Philippians 2:5-8</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/col/2/15/" class="scripture-ref" data-book="col" data-chapter="2" data-verse="15" target="_blank" rel="noopener">Colossians 2:13-15</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/heb/2/8/" class="scripture-ref" data-book="heb" data-chapter="2" data-verse="8" target="_blank" rel="noopener">Hebrews 2:8-9</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/heb/5/7/" class="scripture-ref" data-book="heb" data-chapter="5" data-verse="7" target="_blank" rel="noopener">Hebrews 5:7-9</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/jas/2/23/" class="scripture-ref" data-book="jas" data-chapter="2" data-verse="23" target="_blank" rel="noopener">James 2:23</a>
+      <span class="index-section"><a href="#section-intro">Intro</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/1pe/2/9/" class="scripture-ref" data-book="1pe" data-chapter="2" data-verse="9" target="_blank" rel="noopener">1 Peter 2:9</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/rev/5/9/" class="scripture-ref" data-book="rev" data-chapter="5" data-verse="9" target="_blank" rel="noopener">Revelation 5:9-10</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+  </div>
+</section>
+
+<footer class="study-footer">
+  <p>Generated by <a href="index.html">Berean Study</a> &middot; Scripture links open at <a href="https://www.blueletterbible.org" target="_blank" rel="noopener">Blue Letter Bible</a></p>
+  <p>Inline verse text: ESV &middot; External links follow your selected translation</p>
+</footer>
+
+<script>
+(function() {
+  var html = document.documentElement;
+  var toggle = document.getElementById('themeToggle');
+  var stored = localStorage.getItem('berean-theme');
+  if (stored) html.setAttribute('data-theme', stored);
+
+  toggle.addEventListener('click', function() {
+    var next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('berean-theme', next);
+  });
+
+  var select = document.getElementById('translationSelect');
+  var savedTranslation = localStorage.getItem('berean-translation') || 'esv';
+  select.value = savedTranslation;
+  updateLinks(savedTranslation);
+
+  select.addEventListener('change', function() {
+    var translation = this.value;
+    localStorage.setItem('berean-translation', translation);
+    updateLinks(translation);
+  });
+
+  function updateLinks(translation) {
+    document.querySelectorAll('.scripture-ref').forEach(function(link) {
+      var book = link.dataset.book;
+      var chapter = link.dataset.chapter;
+      var verse = link.dataset.verse;
+      if (book && chapter) {
+        var url = 'https://www.blueletterbible.org/' + translation + '/' + book + '/' + chapter + '/';
+        if (verse) url += verse + '/';
+        link.href = url;
+      }
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

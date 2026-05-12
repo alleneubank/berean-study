@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{STUDY_TITLE}} — Berean Study</title>
+<style>
+  /* ── CSS Variables ── */
+  :root {
+    --font-serif: 'Georgia', 'Times New Roman', 'Garamond', serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --max-width: 720px;
+    --aside-width: 200px;
+  }
+
+  [data-theme="light"] {
+    --bg: #FAF7F2;
+    --bg-alt: #F0EBE3;
+    --bg-scripture: #F5F0E8;
+    --bg-aside: #EDE8DF;
+    --text: #2C2419;
+    --text-muted: #6B5D4F;
+    --text-scripture: #3D2E1C;
+    --accent: #8B1A1A;
+    --accent-light: #A0522D;
+    --border: #D4CABC;
+    --border-light: #E5DDD2;
+    --shadow: rgba(44, 36, 25, 0.08);
+    --drop-cap: #8B1A1A;
+    --link: #6B3A2A;
+    --link-hover: #8B1A1A;
+  }
+
+  [data-theme="dark"] {
+    --bg: #1A1612;
+    --bg-alt: #242019;
+    --bg-scripture: #2A2520;
+    --bg-aside: #1F1B16;
+    --text: #E0D8CC;
+    --text-muted: #A09580;
+    --text-scripture: #D4C8B4;
+    --accent: #D4856A;
+    --accent-light: #C9A96E;
+    --border: #3D362C;
+    --border-light: #332D24;
+    --shadow: rgba(0, 0, 0, 0.3);
+    --drop-cap: #D4856A;
+    --link: #C9A96E;
+    --link-hover: #D4856A;
+  }
+
+  /* ── Reset & Base ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    font-size: 18px;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    font-family: var(--font-serif);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    padding: 0;
+  }
+
+  /* ── Top Bar ── */
+  .top-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    padding: 0.5rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    backdrop-filter: blur(8px);
+  }
+
+  .top-bar-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .top-bar .logo {
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.7rem;
+  }
+
+  .top-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .translation-select {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg);
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  .theme-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1;
+  }
+
+  /* ── Header ── */
+  .study-header {
+    max-width: var(--max-width);
+    margin: 3rem auto 0;
+    padding: 0 1.5rem;
+    text-align: center;
+  }
+
+  .study-meta {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+
+  .study-meta .source { font-weight: 600; }
+  .study-meta .divider { margin: 0 0.5rem; opacity: 0.4; }
+
+  .study-title {
+    font-size: 2.2rem;
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    font-style: italic;
+  }
+
+  .study-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+  }
+
+  .series-nav {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .series-nav a {
+    color: var(--link);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .series-nav a:hover {
+    color: var(--link-hover);
+    border-color: var(--link-hover);
+  }
+
+  /* ── Dividers ── */
+  .divider-ornament {
+    text-align: center;
+    margin: 2.5rem auto;
+    color: var(--border);
+    font-size: 1.2rem;
+    letter-spacing: 0.5rem;
+  }
+
+  /* ── Table of Contents ── */
+  .toc {
+    max-width: var(--max-width);
+    margin: 0 auto 3rem;
+    padding: 1.5rem 2rem;
+    background: var(--bg-alt);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+  }
+
+  .toc h2 {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .toc ol {
+    list-style: none;
+    counter-reset: toc;
+    padding: 0;
+  }
+
+  .toc li {
+    counter-increment: toc;
+    margin-bottom: 0.4rem;
+  }
+
+  .toc li::before {
+    content: counter(toc) ".";
+    color: var(--accent);
+    font-weight: 600;
+    margin-right: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .toc a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+
+  .toc a:hover {
+    border-bottom-color: var(--accent);
+  }
+
+  /* ── Main Content ── */
+  .study-content {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* ── Sections ── */
+  .study-section {
+    margin-bottom: 3.5rem;
+  }
+
+  .section-heading {
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .section-number {
+    color: var(--accent);
+    font-weight: 700;
+    margin-right: 0.3rem;
+  }
+
+  /* ── Drop Cap ── */
+  .drop-cap::first-letter {
+    float: left;
+    font-size: 3.5em;
+    line-height: 0.8;
+    padding-right: 0.08em;
+    padding-top: 0.07em;
+    color: var(--drop-cap);
+    font-weight: 400;
+  }
+
+  /* ── Scripture Blocks ── */
+  .scripture-block {
+    background: var(--bg-scripture);
+    border-left: 3px solid var(--accent);
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .scripture-block .verse-text {
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-scripture);
+  }
+
+  .scripture-block .verse-ref {
+    display: block;
+    margin-top: 0.5rem;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--accent);
+  }
+
+  .scripture-block .verse-ref a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--accent);
+  }
+
+  .scripture-block .verse-ref a:hover {
+    border-bottom-style: solid;
+  }
+
+  /* ── Inline Scripture References ── */
+  .scripture-ref {
+    color: var(--link);
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 1px dotted var(--link);
+    white-space: nowrap;
+  }
+
+  .scripture-ref:hover {
+    color: var(--link-hover);
+    border-bottom-style: solid;
+  }
+
+  /* ── Expandable Verse ── */
+  .verse-expand {
+    margin: 1rem 0;
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .verse-expand summary {
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    background: var(--bg-alt);
+    color: var(--text);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .verse-expand summary::before {
+    content: "▸";
+    font-size: 0.7rem;
+    color: var(--accent);
+    transition: transform 0.2s;
+  }
+
+  .verse-expand[open] summary::before {
+    transform: rotate(90deg);
+  }
+
+  .verse-expand .expand-content {
+    padding: 1rem 1.25rem;
+    font-size: 0.92rem;
+    color: var(--text-scripture);
+    font-style: italic;
+    line-height: 1.7;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .verse-expand .expand-note {
+    font-style: normal;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border-light);
+  }
+
+  /* ── Biblical Placement Aside ── */
+  .biblical-placement {
+    background: var(--bg-aside);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+
+  .biblical-placement .aside-label {
+    font-family: var(--font-sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  /* ── Body Paragraphs ── */
+  .study-content p {
+    margin-bottom: 1rem;
+  }
+
+  .study-content strong {
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  /* ── Closing Section ── */
+  .closing-thought {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    margin: 3rem 0;
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .closing-thought h2 {
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+
+  .closing-thought p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    max-width: 540px;
+    margin: 0 auto 0.75rem;
+  }
+
+  /* ── Scripture Index ── */
+  .scripture-index {
+    max-width: var(--max-width);
+    margin: 3rem auto;
+    padding: 2rem 1.5rem;
+    border-top: 2px solid var(--border);
+  }
+
+  .scripture-index h2 {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .index-columns {
+    columns: 2;
+    column-gap: 2rem;
+    font-size: 0.85rem;
+  }
+
+  .index-entry {
+    break-inside: avoid;
+    margin-bottom: 0.3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .index-entry a {
+    color: var(--link);
+    text-decoration: none;
+  }
+
+  .index-entry a:hover {
+    color: var(--link-hover);
+  }
+
+  .index-section {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-family: var(--font-sans);
+    margin-left: 0.5rem;
+  }
+
+  /* ── Footer ── */
+  .study-footer {
+    max-width: var(--max-width);
+    margin: 3rem auto;
+    padding: 1.5rem;
+    text-align: center;
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-light);
+  }
+
+  .study-footer a {
+    color: var(--link);
+    text-decoration: none;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    html { font-size: 16px; }
+    .study-title { font-size: 1.8rem; }
+    .section-heading { font-size: 1.2rem; }
+    .index-columns { columns: 1; }
+    .study-header { margin-top: 2rem; }
+    .top-bar { padding: 0.5rem 1rem; }
+  }
+
+  /* ── Print ── */
+  @media print {
+    .top-bar, .theme-toggle, .translation-select { display: none; }
+    body { background: white; color: black; font-size: 11pt; }
+    .scripture-block { border-left-color: #666; background: #f5f5f5; }
+    .study-header { margin-top: 0; }
+    .verse-expand { break-inside: avoid; }
+    .verse-expand[open] .expand-content { display: block; }
+    a { color: inherit; text-decoration: none; }
+    .scripture-ref { border-bottom: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Top Bar ── -->
+<div class="top-bar">
+  <div class="top-bar-left">
+    <a href="index.html" class="logo">Berean Study</a>
+  </div>
+  <div class="top-bar-right">
+    <select class="translation-select" id="translationSelect" aria-label="Bible translation">
+      <option value="esv">ESV</option>
+      <option value="nkjv">NKJV</option>
+      <option value="kjv">KJV</option>
+      <option value="nasb20">NASB</option>
+      <option value="niv">NIV</option>
+      <option value="nlt">NLT</option>
+    </select>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">◐</button>
+  </div>
+</div>
+
+<!-- ── Header ── -->
+<header class="study-header">
+  <div class="study-meta">
+    <span class="source">{{SOURCE_NAME}}</span>
+    <span class="divider">·</span>
+    <span class="date">{{DATE}}</span>
+    <!--SERIES_META <span class="divider">·</span><span class="series">{{SERIES_NAME}} · Part {{PART_NUMBER}}</span> SERIES_META-->
+  </div>
+  <h1 class="study-title">{{STUDY_TITLE}}</h1>
+  <p class="study-subtitle">{{STUDY_SUBTITLE}}</p>
+  <!--SERIES_NAV
+  <nav class="series-nav">
+    {{SERIES_LINKS}}
+  </nav>
+  SERIES_NAV-->
+</header>
+
+<div class="divider-ornament">✦ ✦ ✦</div>
+
+<!-- ── Table of Contents ── -->
+<nav class="toc">
+  <h2>Contents</h2>
+  <ol>
+    {{TOC_ENTRIES}}
+    <!-- Example: <li><a href="#section-1">Belief Alone Isn't Saving Faith</a></li> -->
+  </ol>
+</nav>
+
+<!-- ── Study Content ── -->
+<main class="study-content">
+
+  {{STUDY_SECTIONS}}
+
+  <!--
+    SECTION TEMPLATE — repeat for each point:
+
+    <section class="study-section" id="section-1">
+      <h2 class="section-heading"><span class="section-number">1.</span> Section Title</h2>
+
+      <div class="scripture-block">
+        <p class="verse-text">"Verse text here."</p>
+        <span class="verse-ref">— <a href="https://www.blueletterbible.org/esv/jas/2/19/" class="scripture-ref" data-book="jas" data-chapter="2" data-verse="19" target="_blank" rel="noopener">James 2:19</a></span>
+      </div>
+
+      <p class="drop-cap">First paragraph of expansion with drop cap...</p>
+
+      <p>Subsequent paragraphs...</p>
+
+      <details class="verse-expand">
+        <summary><a href="https://www.blueletterbible.org/esv/mat/7/21/" class="scripture-ref" data-book="mat" data-chapter="7" data-verse="21" target="_blank" rel="noopener">Matthew 7:21-23</a></summary>
+        <div class="expand-content">
+          "Not everyone who says to me, 'Lord, Lord,' will enter the kingdom of heaven..."
+        </div>
+        <p class="expand-note">Connection: explanation of how this verse relates.</p>
+      </details>
+
+      <div class="biblical-placement">
+        <p class="aside-label">Biblical Placement</p>
+        <p>Context paragraph about where this sits in Scripture...</p>
+      </div>
+    </section>
+  -->
+
+  <!-- ── Closing Thought ── -->
+  <section class="closing-thought">
+    <h2>Closing Thought</h2>
+    {{CLOSING_CONTENT}}
+  </section>
+
+</main>
+
+<!-- ── Scripture Index ── -->
+<section class="scripture-index">
+  <h2>Scripture Index</h2>
+  <div class="index-columns">
+    {{SCRIPTURE_INDEX}}
+    <!--
+      Example entry:
+      <div class="index-entry">
+        <a href="https://www.blueletterbible.org/esv/gen/2/16/" class="scripture-ref" data-book="gen" data-chapter="2" data-verse="16" target="_blank" rel="noopener">Genesis 2:16-17</a>
+        <span class="index-section"><a href="#section-2">§2</a></span>
+      </div>
+    -->
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer class="study-footer">
+  <p>Generated by <a href="index.html">Berean Study</a> · Scripture links open at <a href="https://www.blueletterbible.org" target="_blank" rel="noopener">Blue Letter Bible</a></p>
+  <p>Inline verse text: ESV · External links follow your selected translation</p>
+</footer>
+
+<!-- ── JavaScript ── -->
+<script>
+(function() {
+  // ── Theme Toggle ──
+  const html = document.documentElement;
+  const toggle = document.getElementById('themeToggle');
+  const stored = localStorage.getItem('berean-theme');
+  if (stored) html.setAttribute('data-theme', stored);
+
+  toggle.addEventListener('click', function() {
+    const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('berean-theme', next);
+  });
+
+  // ── Translation Switcher ──
+  const select = document.getElementById('translationSelect');
+  const savedTranslation = localStorage.getItem('berean-translation') || 'esv';
+  select.value = savedTranslation;
+  updateLinks(savedTranslation);
+
+  select.addEventListener('change', function() {
+    const translation = this.value;
+    localStorage.setItem('berean-translation', translation);
+    updateLinks(translation);
+  });
+
+  function updateLinks(translation) {
+    document.querySelectorAll('.scripture-ref').forEach(function(link) {
+      const book = link.dataset.book;
+      const chapter = link.dataset.chapter;
+      const verse = link.dataset.verse;
+      if (book && chapter) {
+        var url = 'https://www.blueletterbible.org/' + translation + '/' + book + '/' + chapter + '/';
+        if (verse) url += verse + '/';
+        link.href = url;
+      }
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

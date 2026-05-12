@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Berean Study Library</title>
+<style>
+  :root {
+    --font-serif: 'Georgia', 'Times New Roman', 'Garamond', serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --max-width: 720px;
+  }
+
+  [data-theme="light"] {
+    --bg: #FAF7F2;
+    --bg-alt: #F0EBE3;
+    --text: #2C2419;
+    --text-muted: #6B5D4F;
+    --accent: #8B1A1A;
+    --border: #D4CABC;
+    --border-light: #E5DDD2;
+    --link: #6B3A2A;
+    --link-hover: #8B1A1A;
+  }
+
+  [data-theme="dark"] {
+    --bg: #1A1612;
+    --bg-alt: #242019;
+    --text: #E0D8CC;
+    --text-muted: #A09580;
+    --accent: #D4856A;
+    --border: #3D362C;
+    --border-light: #332D24;
+    --link: #C9A96E;
+    --link-hover: #D4856A;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 18px; -webkit-font-smoothing: antialiased; }
+
+  body {
+    font-family: var(--font-serif);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    padding: 0;
+  }
+
+  .top-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    padding: 0.5rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    backdrop-filter: blur(8px);
+  }
+
+  .top-bar .logo {
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-size: 0.7rem;
+  }
+
+  .theme-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1;
+  }
+
+  .library-header {
+    max-width: var(--max-width);
+    margin: 4rem auto 1rem;
+    padding: 0 1.5rem;
+    text-align: center;
+  }
+
+  .library-header h1 {
+    font-size: 2.2rem;
+    font-weight: 400;
+    font-style: italic;
+    margin-bottom: 0.5rem;
+  }
+
+  .library-header .epigraph {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-style: italic;
+    max-width: 520px;
+    margin: 0 auto 0.5rem;
+    line-height: 1.6;
+  }
+
+  .library-header .epigraph-ref {
+    font-size: 0.75rem;
+    color: var(--accent);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  .divider-ornament {
+    text-align: center;
+    margin: 2rem auto;
+    color: var(--border);
+    font-size: 1.2rem;
+    letter-spacing: 0.5rem;
+  }
+
+  .library-content {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem;
+  }
+
+  .series-group {
+    margin-bottom: 3rem;
+  }
+
+  .series-group h2 {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .study-card {
+    display: block;
+    text-decoration: none;
+    color: var(--text);
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    margin-bottom: 0.75rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .study-card:hover {
+    border-color: var(--accent);
+    background: var(--bg-alt);
+  }
+
+  .study-card .card-title {
+    font-size: 1.1rem;
+    font-weight: 400;
+    font-style: italic;
+    margin-bottom: 0.25rem;
+  }
+
+  .study-card .card-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .study-card .card-meta {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    display: flex;
+    gap: 1rem;
+  }
+
+  .study-card .card-meta .source { font-weight: 600; }
+
+  .library-footer {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 1.5rem;
+    text-align: center;
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-light);
+  }
+
+  @media (max-width: 600px) {
+    html { font-size: 16px; }
+    .library-header h1 { font-size: 1.8rem; }
+    .library-header { margin-top: 2rem; }
+  }
+
+  @media print {
+    .top-bar, .theme-toggle { display: none; }
+    body { background: white; color: black; }
+    .library-header { margin-top: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span class="logo">Berean Study</span>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">&#9684;</button>
+</div>
+
+<header class="library-header">
+  <h1>Berean Study Library</h1>
+  <p class="epigraph">"Now the Berean Jews were of more noble character than those in Thessalonica, for they received the message with great eagerness and examined the Scriptures every day to see if what Paul said was true."</p>
+  <span class="epigraph-ref">Acts 17:11</span>
+</header>
+
+<div class="divider-ornament">&#10022; &#10022; &#10022;</div>
+
+<main class="library-content">
+
+  <section class="series-group">
+    <h2>You've Heard It Said &middot; Fearless House</h2>
+
+    <a href="2026-03-29-youve-heard-it-said-pt3.html" class="study-card">
+      <div class="card-title">Gardens &amp; a Cross</div>
+      <div class="card-subtitle">Part 3 &middot; Failure, Surrender, and Restored Authority</div>
+      <div class="card-meta">
+        <span class="source">Fearless House</span>
+        <span>March 29, 2026</span>
+        <span>35 verses referenced</span>
+      </div>
+    </a>
+
+    <a href="2026-03-22-youve-heard-it-said-pt2.html" class="study-card">
+      <div class="card-title">Belief Is Not Enough</div>
+      <div class="card-subtitle">Part 2 &middot; Faith That Moves From Head to Hands</div>
+      <div class="card-meta">
+        <span class="source">Fearless House</span>
+        <span>March 22, 2026</span>
+        <span>27 verses referenced</span>
+      </div>
+    </a>
+  </section>
+
+</main>
+
+<footer class="library-footer">
+  <p>Generated by Berean Study &middot; Scripture links open at <a href="https://www.blueletterbible.org" target="_blank" rel="noopener" style="color: var(--link);">Blue Letter Bible</a></p>
+</footer>
+
+<script>
+(function() {
+  const html = document.documentElement;
+  const toggle = document.getElementById('themeToggle');
+  const stored = localStorage.getItem('berean-theme');
+  if (stored) html.setAttribute('data-theme', stored);
+  toggle.addEventListener('click', function() {
+    const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('berean-theme', next);
+  });
+})();
+</script>
+
+</body>
+</html>
