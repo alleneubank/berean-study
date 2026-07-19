@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THINK! — Berean Study</title>
+<style>
+  /* ── CSS Variables ── */
+  :root {
+    --font-serif: 'Georgia', 'Times New Roman', 'Garamond', serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --max-width: 720px;
+    --aside-width: 200px;
+  }
+
+  [data-theme="light"] {
+    --bg: #FAF7F2;
+    --bg-alt: #F0EBE3;
+    --bg-scripture: #F5F0E8;
+    --bg-aside: #EDE8DF;
+    --text: #2C2419;
+    --text-muted: #6B5D4F;
+    --text-scripture: #3D2E1C;
+    --accent: #8B1A1A;
+    --accent-light: #A0522D;
+    --border: #D4CABC;
+    --border-light: #E5DDD2;
+    --shadow: rgba(44, 36, 25, 0.08);
+    --drop-cap: #8B1A1A;
+    --link: #6B3A2A;
+    --link-hover: #8B1A1A;
+  }
+
+  [data-theme="dark"] {
+    --bg: #1A1612;
+    --bg-alt: #242019;
+    --bg-scripture: #2A2520;
+    --bg-aside: #1F1B16;
+    --text: #E0D8CC;
+    --text-muted: #A09580;
+    --text-scripture: #D4C8B4;
+    --accent: #D4856A;
+    --accent-light: #C9A96E;
+    --border: #3D362C;
+    --border-light: #332D24;
+    --shadow: rgba(0, 0, 0, 0.3);
+    --drop-cap: #D4856A;
+    --link: #C9A96E;
+    --link-hover: #D4856A;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    font-size: 18px;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    font-family: var(--font-serif);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    padding: 0;
+  }
+
+  .top-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    padding: 0.5rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    backdrop-filter: blur(8px);
+  }
+
+  .top-bar-left { display: flex; align-items: center; gap: 1rem; }
+
+  .top-bar .logo {
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.7rem;
+  }
+
+  .top-bar-right { display: flex; align-items: center; gap: 0.75rem; }
+
+  .translation-select {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg);
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  .theme-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1;
+  }
+
+  .study-header {
+    max-width: var(--max-width);
+    margin: 3rem auto 0;
+    padding: 0 1.5rem;
+    text-align: center;
+  }
+
+  .study-meta {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+
+  .study-meta .source { font-weight: 600; }
+  .study-meta .divider { margin: 0 0.5rem; opacity: 0.4; }
+
+  .study-title {
+    font-size: 2.2rem;
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    font-style: italic;
+  }
+
+  .study-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+  }
+
+  .series-nav {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .series-nav a {
+    color: var(--link);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .series-nav a:hover { color: var(--link-hover); border-color: var(--link-hover); }
+
+  .divider-ornament {
+    text-align: center;
+    margin: 2.5rem auto;
+    color: var(--border);
+    font-size: 1.2rem;
+    letter-spacing: 0.5rem;
+  }
+
+  .toc {
+    max-width: var(--max-width);
+    margin: 0 auto 3rem;
+    padding: 1.5rem 2rem;
+    background: var(--bg-alt);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+  }
+
+  .toc h2 {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .toc ol { list-style: none; counter-reset: toc; padding: 0; }
+  .toc li { counter-increment: toc; margin-bottom: 0.4rem; }
+
+  .toc li::before {
+    content: counter(toc) ".";
+    color: var(--accent);
+    font-weight: 600;
+    margin-right: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .toc a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+
+  .toc a:hover { border-bottom-color: var(--accent); }
+
+  .study-content {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .study-section { margin-bottom: 3.5rem; }
+
+  .section-heading {
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .section-number {
+    color: var(--accent);
+    font-weight: 700;
+    margin-right: 0.3rem;
+  }
+
+  .drop-cap::first-letter {
+    float: left;
+    font-size: 3.5em;
+    line-height: 0.8;
+    padding-right: 0.08em;
+    padding-top: 0.07em;
+    color: var(--drop-cap);
+    font-weight: 400;
+  }
+
+  .scripture-block {
+    background: var(--bg-scripture);
+    border-left: 3px solid var(--accent);
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .scripture-block .verse-text {
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-scripture);
+  }
+
+  .scripture-block .verse-ref {
+    display: block;
+    margin-top: 0.5rem;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--accent);
+  }
+
+  .scripture-block .verse-ref a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--accent);
+  }
+
+  .scripture-block .verse-ref a:hover { border-bottom-style: solid; }
+
+  .scripture-ref {
+    color: var(--link);
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 1px dotted var(--link);
+    white-space: nowrap;
+  }
+
+  .scripture-ref:hover {
+    color: var(--link-hover);
+    border-bottom-style: solid;
+  }
+
+  .verse-expand {
+    margin: 1rem 0;
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .verse-expand summary {
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    background: var(--bg-alt);
+    color: var(--text);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .verse-expand summary::before {
+    content: "\25B8";
+    font-size: 0.7rem;
+    color: var(--accent);
+    transition: transform 0.2s;
+  }
+
+  .verse-expand[open] summary::before { transform: rotate(90deg); }
+
+  .verse-expand .expand-content {
+    padding: 1rem 1.25rem;
+    font-size: 0.92rem;
+    color: var(--text-scripture);
+    font-style: italic;
+    line-height: 1.7;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .verse-expand .expand-note {
+    font-style: normal;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .biblical-placement {
+    background: var(--bg-aside);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+
+  .biblical-placement .aside-label {
+    font-family: var(--font-sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .study-content p { margin-bottom: 1rem; }
+  .study-content strong { font-weight: 700; color: var(--text); }
+
+  .closing-thought {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    margin: 3rem 0;
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .closing-thought h2 {
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+
+  .closing-thought p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    max-width: 540px;
+    margin: 0 auto 0.75rem;
+  }
+
+  .scripture-index {
+    max-width: var(--max-width);
+    margin: 3rem auto;
+    padding: 2rem 1.5rem;
+    border-top: 2px solid var(--border);
+  }
+
+  .scripture-index h2 {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .index-columns {
+    columns: 2;
+    column-gap: 2rem;
+    font-size: 0.85rem;
+  }
+
+  .index-entry {
+    break-inside: avoid;
+    margin-bottom: 0.3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .index-entry a {
+    color: var(--link);
+    text-decoration: none;
+  }
+
+  .index-entry a:hover { color: var(--link-hover); }
+
+  .index-section {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-family: var(--font-sans);
+    margin-left: 0.5rem;
+  }
+
+  .study-footer {
+    max-width: var(--max-width);
+    margin: 3rem auto;
+    padding: 1.5rem;
+    text-align: center;
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-light);
+  }
+
+  .study-footer a { color: var(--link); text-decoration: none; }
+
+  @media (max-width: 600px) {
+    html { font-size: 16px; }
+    .study-title { font-size: 1.8rem; }
+    .section-heading { font-size: 1.2rem; }
+    .index-columns { columns: 1; }
+    .study-header { margin-top: 2rem; }
+    .top-bar { padding: 0.5rem 1rem; }
+  }
+
+  @media print {
+    .top-bar, .theme-toggle, .translation-select { display: none; }
+    body { background: white; color: black; font-size: 11pt; }
+    .scripture-block { border-left-color: #666; background: #f5f5f5; }
+    .study-header { margin-top: 0; }
+    .verse-expand { break-inside: avoid; }
+    .verse-expand[open] .expand-content { display: block; }
+    a { color: inherit; text-decoration: none; }
+    .scripture-ref { border-bottom: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-bar-left">
+    <a href="index.html" class="logo">Berean Study</a>
+  </div>
+  <div class="top-bar-right">
+    <select class="translation-select" id="translationSelect" aria-label="Bible translation">
+      <option value="esv">ESV</option>
+      <option value="nkjv">NKJV</option>
+      <option value="kjv">KJV</option>
+      <option value="nasb20">NASB</option>
+      <option value="niv">NIV</option>
+      <option value="nlt">NLT</option>
+    </select>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">&#9684;</button>
+  </div>
+</div>
+
+<header class="study-header">
+  <div class="study-meta">
+    <span class="source">Fearless House</span>
+    <span class="divider">&middot;</span>
+    <span class="date">July 17, 2026</span>
+    <span class="divider">&middot;</span>
+    <span class="series">Pastor Mike Connaway</span>
+  </div>
+  <h1 class="study-title">THINK!</h1>
+  <p class="study-subtitle">How the Kindness of God Leads to Repentance</p>
+  <nav class="series-nav">
+    <a href="2026-07-16-faith-hope-love.html">Fearless House &middot; Faith. Hope. Love. &rarr;</a>
+  </nav>
+</header>
+
+<div class="divider-ornament">&#10022; &#10022; &#10022;</div>
+
+<nav class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#section-1">The Motive Behind Every Change</a></li>
+    <li><a href="#section-2">Why Guilt and Fear Cannot Transform</a></li>
+    <li><a href="#section-3">Zacchaeus: Kindness Before Restitution</a></li>
+    <li><a href="#section-4">The Woman Caught in Adultery: Mercy, Then "Sin No More"</a></li>
+    <li><a href="#section-think">The THINK Question</a></li>
+  </ol>
+</nav>
+
+<main class="study-content">
+
+  <!-- ══════════ Section 1 — The Motive ══════════ -->
+  <section class="study-section" id="section-1">
+    <h2 class="section-heading"><span class="section-number">1.</span> The Motive Behind Every Change</h2>
+
+    <div class="scripture-block">
+      <p class="verse-text">"Or do you presume on the riches of his kindness and forbearance and patience, not knowing that God's kindness is meant to lead you to repentance?"</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/rom/2/4/" class="scripture-ref" data-book="rom" data-chapter="2" data-verse="4" target="_blank" rel="noopener">Romans 2:4</a></span>
+    </div>
+
+    <p class="drop-cap">Even the desire to change needs a motivator. No one repents in a vacuum. Something has to move the heart before the will can turn. The sermon's central claim is that the engine of real transformation is not guilt, not fear, not shame&mdash;it is the <strong>kindness</strong> of God. Paul names it precisely: God's kindness is not a reward for repentance already accomplished; it is what <em>leads</em> to it. Kindness comes first. The turning follows.</p>
+
+    <p>This upends the way most of us instinctively try to grow. We assume the path to change runs through condemnation&mdash;that if we feel bad enough about ourselves, we will finally do better. Paul says the opposite. It is when we grasp how patient, how forbearing, how <em>good</em> God has been toward us that the heart softens enough to turn. <strong>Kindness is not the reward at the end of repentance; it is the road that gets you there.</strong></p>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/tit/3/4/" class="scripture-ref" data-book="tit" data-chapter="3" data-verse="4" target="_blank" rel="noopener">Titus 3:4-5</a></summary>
+      <div class="expand-content">"But when the goodness and loving kindness of God our Savior appeared, he saved us, not because of works done by us in righteousness, but according to his own mercy, by the washing of regeneration and renewal of the Holy Spirit,"</div>
+      <p class="expand-note">Paul roots salvation itself in God's "loving kindness"&mdash;and pointedly not in "works done by us." The initiative is entirely His. We are not cleaned up first and then accepted; we are met in kindness and cleansed as a result.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/rom/5/8/" class="scripture-ref" data-book="rom" data-chapter="5" data-verse="8" target="_blank" rel="noopener">Romans 5:8</a></summary>
+      <div class="expand-content">"but God shows his love for us in that while we were still sinners, Christ died for us."</div>
+      <p class="expand-note">The timing is the whole point. The cross came "while we were still sinners"&mdash;before any turning, before any cleanup. God's kindness is demonstrated in advance of our repentance, which is exactly why it has the power to produce it.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/jer/31/3/" class="scripture-ref" data-book="jer" data-chapter="31" data-verse="3" target="_blank" rel="noopener">Jeremiah 31:3</a></summary>
+      <div class="expand-content">"the Lord appeared to him from far away. I have loved you with an everlasting love; therefore I have continued my faithfulness to you."</div>
+      <p class="expand-note">Spoken to a people in exile because of their sin. God does not lead with the indictment; He leads with everlasting love. His faithfulness is the <em>reason</em> He keeps drawing them back, not the prize for coming.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/hos/11/4/" class="scripture-ref" data-book="hos" data-chapter="11" data-verse="4" target="_blank" rel="noopener">Hosea 11:4</a></summary>
+      <div class="expand-content">"I led them with cords of kindness, with the bands of love, and I became to them as one who eases the yoke on their jaws, and I bent down to them and fed them."</div>
+      <p class="expand-note">God pictures Himself drawing His people the way you would coax a frightened animal&mdash;not with a whip but with "cords of kindness." The tenderness is the technique. He bends down; He feeds; He draws.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/psa/130/4/" class="scripture-ref" data-book="psa" data-chapter="130" data-verse="4" target="_blank" rel="noopener">Psalm 130:4</a></summary>
+      <div class="expand-content">"But with you there is forgiveness, that you may be feared."</div>
+      <p class="expand-note">A stunning logic: forgiveness produces reverence, not the reverse. If God dealt only in judgment, He would be dreaded but never loved. Because He forgives, He is held in awe. Kindness is what makes worship possible.</p>
+    </details>
+
+    <div class="biblical-placement">
+      <p class="aside-label">Biblical Placement</p>
+      <p>Romans 2 falls inside Paul's opening argument (<a href="https://www.blueletterbible.org/esv/rom/1/18/" class="scripture-ref" data-book="rom" data-chapter="1" data-verse="18" target="_blank" rel="noopener">Romans 1:18&ndash;3:20</a>) that every human being&mdash;pagan and religious alike&mdash;stands guilty before God. Verse 4 is aimed at the self-assured moralist who assumes God's patience means approval. Paul reframes that patience: God has been holding back judgment not because sin doesn't matter, but to give room for the heart to turn. The "riches of his kindness" are the very evidence of a God who would rather lead than condemn. This single verse becomes the seed of the gospel Paul unfolds for the next fifteen chapters&mdash;that grace, not law-keeping, is what remakes a person.</p>
+    </div>
+  </section>
+
+  <!-- ══════════ Section 2 — Guilt and Fear ══════════ -->
+  <section class="study-section" id="section-2">
+    <h2 class="section-heading"><span class="section-number">2.</span> Why Guilt and Fear Cannot Transform</h2>
+
+    <div class="scripture-block">
+      <p class="verse-text">"For godly grief produces a repentance that leads to salvation without regret, whereas worldly grief produces death."</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/2co/7/10/" class="scripture-ref" data-book="2co" data-chapter="7" data-verse="10" target="_blank" rel="noopener">2 Corinthians 7:10</a></span>
+    </div>
+
+    <p class="drop-cap">Not all sorrow over sin is created equal. Paul draws a hard line between two kinds of grief. "Worldly grief" is the sorrow of guilt and fear&mdash;the crushing weight of having been caught, the dread of consequences, the self-punishment that circles endlessly without ever setting you free. It can change behavior for a season, but it cannot change a heart. Left to itself, Paul says, it "produces death." "Godly grief," by contrast, is sorrow held inside the security of God's kindness&mdash;and it produces a repentance that has no regret in it, because it lands you in freedom.</p>
+
+    <p>This is why guilt and fear make such poor engines for lasting change. They can pressure the outside of a person while leaving the inside untouched, producing a compliance that is really just a better-managed rebellion. <strong>Behavior modified by fear is not the same as a heart transformed by love.</strong> Scripture consistently locates real change deeper than the will&mdash;in a heart God Himself must remake.</p>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/1jo/4/18/" class="scripture-ref" data-book="1jo" data-chapter="4" data-verse="18" target="_blank" rel="noopener">1 John 4:18</a></summary>
+      <div class="expand-content">"There is no fear in love, but perfect love casts out fear. For fear has to do with punishment, and whoever fears has not been perfected in love."</div>
+      <p class="expand-note">John makes fear and love mutually exclusive as motivators. Fear is oriented toward punishment; it can never mature a person into love. The very thing we reach for to force change is the thing love is designed to drive out.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/rom/8/15/" class="scripture-ref" data-book="rom" data-chapter="8" data-verse="15" target="_blank" rel="noopener">Romans 8:15</a></summary>
+      <div class="expand-content">"For you did not receive the spirit of slavery to fall back into fear, but you have received the Spirit of adoption as sons, by whom we cry, 'Abba! Father!'"</div>
+      <p class="expand-note">Paul contrasts two whole ways of relating to God: the slave, motivated by fear, and the son, motivated by belonging. The Christian is moved to obey not as a slave dreading the lash but as a child who cries "Father." Sonship, not slavery, is the soil change grows in.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/eze/36/26/" class="scripture-ref" data-book="eze" data-chapter="36" data-verse="26" target="_blank" rel="noopener">Ezekiel 36:26</a></summary>
+      <div class="expand-content">"And I will give you a new heart, and a new spirit I will put within you. And I will remove the heart of stone from your flesh and give you a heart of flesh."</div>
+      <p class="expand-note">The deepest problem is a heart of stone&mdash;and stone cannot be frightened into softness. Ezekiel promises a transplant, not a threat. Transformation from the inside out is something God does <em>to</em> us, not something guilt squeezes <em>out</em> of us.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/1jo/4/19/" class="scripture-ref" data-book="1jo" data-chapter="4" data-verse="19" target="_blank" rel="noopener">1 John 4:19</a></summary>
+      <div class="expand-content">"We love because he first loved us."</div>
+      <p class="expand-note">The entire moral life of the believer runs on a response, not a demand. Love is generated in us only by love received first. This is the mechanism the whole sermon describes: kindness experienced becomes kindness expressed.</p>
+    </details>
+
+    <div class="biblical-placement">
+      <p class="aside-label">Biblical Placement</p>
+      <p>Ezekiel prophesied to Israel during the Babylonian exile&mdash;a nation reaping the full consequences of generations of sin. If ever fear and punishment could reform a people, the exile was that moment; instead God diagnoses the real problem as a "heart of stone" and pledges to replace it Himself. That promise (<a href="https://www.blueletterbible.org/esv/eze/36/25/" class="scripture-ref" data-book="eze" data-chapter="36" data-verse="25" target="_blank" rel="noopener">Ezekiel 36:25-27</a>) is later claimed by Jesus as the new birth (<a href="https://www.blueletterbible.org/esv/jhn/3/5/" class="scripture-ref" data-book="jhn" data-chapter="3" data-verse="5" target="_blank" rel="noopener">John 3:5-8</a>) and by Paul as the ministry of the Spirit that writes on hearts rather than tablets of stone (<a href="https://www.blueletterbible.org/esv/2co/3/3/" class="scripture-ref" data-book="2co" data-chapter="3" data-verse="3" target="_blank" rel="noopener">2 Corinthians 3:3</a>). The thread from Ezekiel to the New Testament is unbroken: God's answer to human hardness is never a bigger threat, always a new heart.</p>
+    </div>
+  </section>
+
+  <!-- ══════════ Section 3 — Zacchaeus ══════════ -->
+  <section class="study-section" id="section-3">
+    <h2 class="section-heading"><span class="section-number">3.</span> Zacchaeus: Kindness Before Restitution</h2>
+
+    <div class="scripture-block">
+      <p class="verse-text">"And when Jesus came to the place, he looked up and said to him, 'Zacchaeus, hurry and come down, for I must stay at your house today.'"</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/luk/19/5/" class="scripture-ref" data-book="luk" data-chapter="19" data-verse="5" target="_blank" rel="noopener">Luke 19:5</a></span>
+    </div>
+
+    <p class="drop-cap">Zacchaeus was a chief tax collector&mdash;a wealthy collaborator who had grown rich by defrauding his own people. He was the last man in Jericho anyone expected Jesus to honor. Yet Jesus does not open with a demand for repayment or a lecture on his corruption. He opens with an invitation to dinner. "I must stay at your house today." Before a single word of restitution is spoken, kindness walks through the door. The demand for change never comes; the change comes anyway.</p>
+
+    <p>Watch the sequence, because it is the whole point. Jesus offers honor to a man the crowd had written off (<a href="https://www.blueletterbible.org/esv/luk/19/7/" class="scripture-ref" data-book="luk" data-chapter="19" data-verse="7" target="_blank" rel="noopener">Luke 19:7</a>). In response&mdash;<em>unprompted</em>&mdash;Zacchaeus stands and gives away half his wealth and pledges fourfold restitution to everyone he has cheated. <strong>Kindness produced repentance before any demand for it was ever made.</strong> Jesus did not have to threaten him into generosity; being received was enough to undo him.</p>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/luk/19/7/" class="scripture-ref" data-book="luk" data-chapter="19" data-verse="7" target="_blank" rel="noopener">Luke 19:7</a></summary>
+      <div class="expand-content">"And when they saw it, they all grumbled, 'He has gone in to be the guest of a man who is a sinner.'"</div>
+      <p class="expand-note">The crowd's instinct is condemnation&mdash;the very approach the sermon says never works. They would have shamed Zacchaeus into hiding. Jesus does the opposite, and the contrast between the crowd's grumbling and Jesus' welcome is the sermon in miniature.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/luk/19/8/" class="scripture-ref" data-book="luk" data-chapter="19" data-verse="8" target="_blank" rel="noopener">Luke 19:8</a></summary>
+      <div class="expand-content">"And Zacchaeus stood and said to the Lord, 'Behold, Lord, the half of my goods I give to the poor. And if I have defrauded anyone of anything, I restore it fourfold.'"</div>
+      <p class="expand-note">Notice who initiates the restitution: Zacchaeus, not Jesus. Repentance here is spontaneous overflow, not extracted compliance. And he doesn't do the minimum&mdash;he applies the most severe restitution the Law knew, voluntarily.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/luk/19/9/" class="scripture-ref" data-book="luk" data-chapter="19" data-verse="9" target="_blank" rel="noopener">Luke 19:9-10</a></summary>
+      <div class="expand-content">"And Jesus said to him, 'Today salvation has come to this house, since he also is a son of Abraham. For the Son of Man came to seek and to save the lost.'"</div>
+      <p class="expand-note">Jesus names what just happened as salvation&mdash;and locates the cause in His own mission to "seek and to save," not in Zacchaeus's cleanup. The seeking came first. The turning followed. This is the thesis statement of Luke's entire gospel.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/exo/22/1/" class="scripture-ref" data-book="exo" data-chapter="22" data-verse="1" target="_blank" rel="noopener">Exodus 22:1</a></summary>
+      <div class="expand-content">"If a man steals an ox or a sheep, and kills it or sells it, he shall repay five oxen for an ox, and four sheep for a sheep."</div>
+      <p class="expand-note">Fourfold repayment was the Law's penalty for deliberate, unrecoverable theft&mdash;the harshest tier of restitution. Zacchaeus, freely, holds himself to it. Kindness did not lower his standard; it raised it far above what mere guilt would have paid.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/num/5/7/" class="scripture-ref" data-book="num" data-chapter="5" data-verse="7" target="_blank" rel="noopener">Numbers 5:7</a></summary>
+      <div class="expand-content">"he shall confess his sin that he has committed. And he shall make full restitution for his wrong, adding a fifth to it and giving it to him to whom he did the wrong."</div>
+      <p class="expand-note">For a wrong voluntarily confessed, the Law required repayment plus a fifth. Zacchaeus blows past even that, choosing the fourfold penalty of the thief caught red-handed. Grace makes people generous beyond obligation&mdash;a heart set free gives more than a heart under compulsion ever could.</p>
+    </details>
+
+    <div class="biblical-placement">
+      <p class="aside-label">Biblical Placement</p>
+      <p>The Zacchaeus account (<a href="https://www.blueletterbible.org/esv/luk/19/1/" class="scripture-ref" data-book="luk" data-chapter="19" data-verse="1" target="_blank" rel="noopener">Luke 19:1-10</a>) is the last encounter Luke records before Jesus enters Jerusalem for the final week. It caps a long stretch of the gospel devoted to Jesus seeking out the outcast&mdash;the lost sheep, the lost coin, the prodigal son (<a href="https://www.blueletterbible.org/esv/luk/15/1/" class="scripture-ref" data-book="luk" data-chapter="15" data-verse="1" target="_blank" rel="noopener">Luke 15</a>). Luke deliberately places a tax collector's salvation right before the cross, as if to say this is <em>why</em> Jesus is going to Jerusalem. Verse 10&mdash;"the Son of Man came to seek and to save the lost"&mdash;is widely regarded as the key verse of the whole book. Zacchaeus is the living demonstration that God's method has never changed: He seeks first, and the seeking is what saves.</p>
+    </div>
+  </section>
+
+  <!-- ══════════ Section 4 — Woman Caught in Adultery ══════════ -->
+  <section class="study-section" id="section-4">
+    <h2 class="section-heading"><span class="section-number">4.</span> The Woman Caught in Adultery: Mercy, Then "Sin No More"</h2>
+
+    <div class="scripture-block">
+      <p class="verse-text">"Jesus stood up and said to her, 'Woman, where are they? Has no one condemned you?' She said, 'No one, Lord.' And Jesus said, 'Neither do I condemn you; go, and from now on sin no more.'"</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/jhn/8/10/" class="scripture-ref" data-book="jhn" data-chapter="8" data-verse="10" target="_blank" rel="noopener">John 8:10-11</a></span>
+    </div>
+
+    <p class="drop-cap">A woman is dragged before Jesus, caught in the very act, with a ring of accusers already holding stones. This is guilt and fear at their most literal&mdash;a mob prepared to execute. Jesus dismantles the whole scene with a sentence: "Let him who is without sin among you be the first to throw a stone." One by one the accusers leave. And then comes the order of His words, which is everything. First: "Neither do I condemn you." <em>Then</em>: "Go, and from now on sin no more." Mercy is spoken before the call to change&mdash;and it is what makes the call bearable.</p>
+
+    <p>Jesus does not soften the standard. "Sin no more" is a real summons to a transformed life; He never pretends her sin was nothing. But He refuses to lead with the stone. <strong>He removes the condemnation first, and only from that safe ground does He call her forward.</strong> Reverse the order&mdash;"sin no more, and <em>then</em> maybe I won't condemn you"&mdash;and you have religion. Keep Jesus' order&mdash;mercy first, then the call&mdash;and you have the gospel.</p>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/jhn/8/7/" class="scripture-ref" data-book="jhn" data-chapter="8" data-verse="7" target="_blank" rel="noopener">John 8:7</a></summary>
+      <div class="expand-content">"And as they continued to ask him, he stood up and said to them, 'Let him who is without sin among you be the first to throw a stone at her.'"</div>
+      <p class="expand-note">Jesus disarms the accusers not by excusing the woman but by exposing them. The tools of condemnation&mdash;shame, stones, public exposure&mdash;are turned back on those wielding them. He clears the courtroom of judges before He speaks a word of mercy to the accused.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/rom/8/1/" class="scripture-ref" data-book="rom" data-chapter="8" data-verse="1" target="_blank" rel="noopener">Romans 8:1</a></summary>
+      <div class="expand-content">"There is therefore now no condemnation for those who are in Christ Jesus."</div>
+      <p class="expand-note">What Jesus spoke to one woman, Paul declares over everyone in Christ. "No condemnation" is not the finish line we earn; it is the starting line we are given. The Christian life is lived <em>from</em> acquittal, not <em>toward</em> it.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/jhn/3/17/" class="scripture-ref" data-book="jhn" data-chapter="3" data-verse="17" target="_blank" rel="noopener">John 3:17</a></summary>
+      <div class="expand-content">"For God did not send his Son into the world to condemn the world, but in order that the world might be saved through him."</div>
+      <p class="expand-note">John states the mission that the woman's story enacts. Condemnation was never the point of Jesus' coming. If the Son Himself did not come to condemn, then a life built on self-condemnation has misread the entire purpose of His arrival.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/luk/7/47/" class="scripture-ref" data-book="luk" data-chapter="7" data-verse="47" target="_blank" rel="noopener">Luke 7:47</a></summary>
+      <div class="expand-content">"Therefore I tell you, her sins, which are many, are forgiven&mdash;for she loved much. But he who is forgiven little, loves little."</div>
+      <p class="expand-note">Another sinful woman, another act of kindness&mdash;and Jesus states the principle outright. The depth of forgiveness received is the source of the love returned. Grace does not make people careless; it makes them devoted.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/tit/2/11/" class="scripture-ref" data-book="tit" data-chapter="2" data-verse="11" target="_blank" rel="noopener">Titus 2:11-12</a></summary>
+      <div class="expand-content">"For the grace of God has appeared, bringing salvation for all people, training us to renounce ungodliness and worldly passions, and to live self-controlled, upright, and godly lives in the present age,"</div>
+      <p class="expand-note">Grace itself is the teacher. Paul says grace <em>trains</em> us to renounce sin&mdash;the same "sin no more" Jesus spoke, now shown to be the fruit grace grows, not the price grace demands. Kindness is not the enemy of holiness; it is holiness's most effective tutor.</p>
+    </details>
+
+    <div class="biblical-placement">
+      <p class="aside-label">Biblical Placement</p>
+      <p>This scene (<a href="https://www.blueletterbible.org/esv/jhn/8/1/" class="scripture-ref" data-book="jhn" data-chapter="8" data-verse="1" target="_blank" rel="noopener">John 8:1-11</a>) unfolds in the temple courts during the Feast of Tabernacles, in the middle of escalating conflict between Jesus and the religious leaders. The trap is legal: the Law of Moses did command stoning for adultery (<a href="https://www.blueletterbible.org/esv/lev/20/10/" class="scripture-ref" data-book="lev" data-chapter="20" data-verse="10" target="_blank" rel="noopener">Leviticus 20:10</a>; <a href="https://www.blueletterbible.org/esv/deu/22/22/" class="scripture-ref" data-book="deu" data-chapter="22" data-verse="22" target="_blank" rel="noopener">Deuteronomy 22:22</a>), so if Jesus frees her He seems to break the Law, and if He condemns her He forfeits His reputation for mercy. He does neither. He upholds the seriousness of sin ("sin no more") while refusing to be its executioner ("neither do I condemn you"). In doing so He previews the cross itself, where God will satisfy justice and extend mercy in the same act&mdash;the condemnation her sin deserved falling on Him instead of her.</p>
+    </div>
+  </section>
+
+  <!-- ══════════ The THINK Question ══════════ -->
+  <section class="closing-thought" id="section-think">
+    <h2>The THINK Question</h2>
+    <p>Am I trying to change through guilt and fear&hellip;</p>
+    <p><strong>or am I allowing the kindness of God to transform my heart from the inside out?</strong></p>
+    <p>Zacchaeus was not shamed into generosity. The woman was not frightened into a new life. Both were met with kindness first&mdash;and the turning followed on its own.</p>
+    <p><em>"God's kindness is meant to lead you to repentance."</em></p>
+  </section>
+
+  <!-- ══════════ The Thread ══════════ -->
+  <section class="study-section" id="section-thread">
+    <h2 class="section-heading">One Thread, Two Testaments</h2>
+
+    <p>The idea that kindness&mdash;not fear&mdash;is what turns a heart runs the length of Scripture. In the Old Testament, God draws Israel "with cords of kindness" (<a href="https://www.blueletterbible.org/esv/hos/11/4/" class="scripture-ref" data-book="hos" data-chapter="11" data-verse="4" target="_blank" rel="noopener">Hosea 11:4</a>) and loves them "with an everlasting love" even in exile (<a href="https://www.blueletterbible.org/esv/jer/31/3/" class="scripture-ref" data-book="jer" data-chapter="31" data-verse="3" target="_blank" rel="noopener">Jeremiah 31:3</a>). He promises the one thing threats can never accomplish: a new heart of flesh in place of stone (<a href="https://www.blueletterbible.org/esv/eze/36/26/" class="scripture-ref" data-book="eze" data-chapter="36" data-verse="26" target="_blank" rel="noopener">Ezekiel 36:26</a>).</p>
+
+    <p>In the New Testament that promise walks into a tax collector's house and stands before a condemned woman. The kindness Israel was promised takes on a face. And Paul finally names the mechanism plainly: it is God's kindness that "is meant to lead you to repentance" (<a href="https://www.blueletterbible.org/esv/rom/2/4/" class="scripture-ref" data-book="rom" data-chapter="2" data-verse="4" target="_blank" rel="noopener">Romans 2:4</a>), and grace itself that "trains us to renounce ungodliness" (<a href="https://www.blueletterbible.org/esv/tit/2/11/" class="scripture-ref" data-book="tit" data-chapter="2" data-verse="11" target="_blank" rel="noopener">Titus 2:11-12</a>).</p>
+
+    <div class="scripture-block">
+      <p class="verse-text">"We love because he first loved us."</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/1jo/4/19/" class="scripture-ref" data-book="1jo" data-chapter="4" data-verse="19" target="_blank" rel="noopener">1 John 4:19</a></span>
+    </div>
+
+    <p>Every genuine change in a person's life runs on that four-word engine. Not "we love so that he will love us"&mdash;that is fear, and it exhausts. But "we love <em>because</em> he first loved us"&mdash;that is kindness, and it transforms. The whole Christian life is a response to a love that arrived first.</p>
+  </section>
+
+</main>
+
+<!-- ══════════ Scripture Index ══════════ -->
+<section class="scripture-index">
+  <h2>Scripture Index</h2>
+  <div class="index-columns">
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/exo/22/1/" class="scripture-ref" data-book="exo" data-chapter="22" data-verse="1" target="_blank" rel="noopener">Exodus 22:1</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/num/5/7/" class="scripture-ref" data-book="num" data-chapter="5" data-verse="7" target="_blank" rel="noopener">Numbers 5:7</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/psa/130/4/" class="scripture-ref" data-book="psa" data-chapter="130" data-verse="4" target="_blank" rel="noopener">Psalm 130:4</a>
+      <span class="index-section"><a href="#section-1">&sect;1</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/jer/31/3/" class="scripture-ref" data-book="jer" data-chapter="31" data-verse="3" target="_blank" rel="noopener">Jeremiah 31:3</a>
+      <span class="index-section"><a href="#section-1">&sect;1</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/eze/36/26/" class="scripture-ref" data-book="eze" data-chapter="36" data-verse="26" target="_blank" rel="noopener">Ezekiel 36:26</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/hos/11/4/" class="scripture-ref" data-book="hos" data-chapter="11" data-verse="4" target="_blank" rel="noopener">Hosea 11:4</a>
+      <span class="index-section"><a href="#section-1">&sect;1</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/luk/7/47/" class="scripture-ref" data-book="luk" data-chapter="7" data-verse="47" target="_blank" rel="noopener">Luke 7:47</a>
+      <span class="index-section"><a href="#section-4">&sect;4</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/luk/19/5/" class="scripture-ref" data-book="luk" data-chapter="19" data-verse="5" target="_blank" rel="noopener">Luke 19:5</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/luk/19/7/" class="scripture-ref" data-book="luk" data-chapter="19" data-verse="7" target="_blank" rel="noopener">Luke 19:7</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/luk/19/8/" class="scripture-ref" data-book="luk" data-chapter="19" data-verse="8" target="_blank" rel="noopener">Luke 19:8</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/luk/19/9/" class="scripture-ref" data-book="luk" data-chapter="19" data-verse="9" target="_blank" rel="noopener">Luke 19:9-10</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/jhn/3/17/" class="scripture-ref" data-book="jhn" data-chapter="3" data-verse="17" target="_blank" rel="noopener">John 3:17</a>
+      <span class="index-section"><a href="#section-4">&sect;4</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/jhn/8/7/" class="scripture-ref" data-book="jhn" data-chapter="8" data-verse="7" target="_blank" rel="noopener">John 8:7</a>
+      <span class="index-section"><a href="#section-4">&sect;4</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/jhn/8/10/" class="scripture-ref" data-book="jhn" data-chapter="8" data-verse="10" target="_blank" rel="noopener">John 8:10-11</a>
+      <span class="index-section"><a href="#section-4">&sect;4</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/rom/2/4/" class="scripture-ref" data-book="rom" data-chapter="2" data-verse="4" target="_blank" rel="noopener">Romans 2:4</a>
+      <span class="index-section"><a href="#section-1">&sect;1</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/rom/5/8/" class="scripture-ref" data-book="rom" data-chapter="5" data-verse="8" target="_blank" rel="noopener">Romans 5:8</a>
+      <span class="index-section"><a href="#section-1">&sect;1</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/rom/8/1/" class="scripture-ref" data-book="rom" data-chapter="8" data-verse="1" target="_blank" rel="noopener">Romans 8:1</a>
+      <span class="index-section"><a href="#section-4">&sect;4</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/rom/8/15/" class="scripture-ref" data-book="rom" data-chapter="8" data-verse="15" target="_blank" rel="noopener">Romans 8:15</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/2co/7/10/" class="scripture-ref" data-book="2co" data-chapter="7" data-verse="10" target="_blank" rel="noopener">2 Corinthians 7:10</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/tit/2/11/" class="scripture-ref" data-book="tit" data-chapter="2" data-verse="11" target="_blank" rel="noopener">Titus 2:11-12</a>
+      <span class="index-section"><a href="#section-4">&sect;4</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/tit/3/4/" class="scripture-ref" data-book="tit" data-chapter="3" data-verse="4" target="_blank" rel="noopener">Titus 3:4-5</a>
+      <span class="index-section"><a href="#section-1">&sect;1</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/1jo/4/18/" class="scripture-ref" data-book="1jo" data-chapter="4" data-verse="18" target="_blank" rel="noopener">1 John 4:18</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/1jo/4/19/" class="scripture-ref" data-book="1jo" data-chapter="4" data-verse="19" target="_blank" rel="noopener">1 John 4:19</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a> &middot; <a href="#section-thread">Thread</a></span>
+    </div>
+  </div>
+</section>
+
+<footer class="study-footer">
+  <p>Generated by <a href="index.html">Berean Study</a> &middot; Scripture links open at <a href="https://www.blueletterbible.org" target="_blank" rel="noopener">Blue Letter Bible</a></p>
+  <p>Inline verse text: ESV &middot; External links follow your selected translation</p>
+</footer>
+
+<script>
+(function() {
+  var html = document.documentElement;
+  var toggle = document.getElementById('themeToggle');
+  var stored = localStorage.getItem('berean-theme');
+  if (stored) html.setAttribute('data-theme', stored);
+
+  toggle.addEventListener('click', function() {
+    var next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('berean-theme', next);
+  });
+
+  var select = document.getElementById('translationSelect');
+  var savedTranslation = localStorage.getItem('berean-translation') || 'esv';
+  select.value = savedTranslation;
+  updateLinks(savedTranslation);
+
+  select.addEventListener('change', function() {
+    var translation = this.value;
+    localStorage.setItem('berean-translation', translation);
+    updateLinks(translation);
+  });
+
+  function updateLinks(translation) {
+    document.querySelectorAll('.scripture-ref').forEach(function(link) {
+      var book = link.dataset.book;
+      var chapter = link.dataset.chapter;
+      var verse = link.dataset.verse;
+      if (book && chapter) {
+        var url = 'https://www.blueletterbible.org/' + translation + '/' + book + '/' + chapter + '/';
+        if (verse) url += verse + '/';
+        link.href = url;
+      }
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

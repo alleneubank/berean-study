@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Faith. Hope. Love. — Berean Study</title>
+<style>
+  /* ── CSS Variables ── */
+  :root {
+    --font-serif: 'Georgia', 'Times New Roman', 'Garamond', serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --max-width: 720px;
+    --aside-width: 200px;
+  }
+
+  [data-theme="light"] {
+    --bg: #FAF7F2;
+    --bg-alt: #F0EBE3;
+    --bg-scripture: #F5F0E8;
+    --bg-aside: #EDE8DF;
+    --text: #2C2419;
+    --text-muted: #6B5D4F;
+    --text-scripture: #3D2E1C;
+    --accent: #8B1A1A;
+    --accent-light: #A0522D;
+    --border: #D4CABC;
+    --border-light: #E5DDD2;
+    --shadow: rgba(44, 36, 25, 0.08);
+    --drop-cap: #8B1A1A;
+    --link: #6B3A2A;
+    --link-hover: #8B1A1A;
+  }
+
+  [data-theme="dark"] {
+    --bg: #1A1612;
+    --bg-alt: #242019;
+    --bg-scripture: #2A2520;
+    --bg-aside: #1F1B16;
+    --text: #E0D8CC;
+    --text-muted: #A09580;
+    --text-scripture: #D4C8B4;
+    --accent: #D4856A;
+    --accent-light: #C9A96E;
+    --border: #3D362C;
+    --border-light: #332D24;
+    --shadow: rgba(0, 0, 0, 0.3);
+    --drop-cap: #D4856A;
+    --link: #C9A96E;
+    --link-hover: #D4856A;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    font-size: 18px;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    font-family: var(--font-serif);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    padding: 0;
+  }
+
+  .top-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    padding: 0.5rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    backdrop-filter: blur(8px);
+  }
+
+  .top-bar-left { display: flex; align-items: center; gap: 1rem; }
+
+  .top-bar .logo {
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.7rem;
+  }
+
+  .top-bar-right { display: flex; align-items: center; gap: 0.75rem; }
+
+  .translation-select {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg);
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  .theme-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1;
+  }
+
+  .study-header {
+    max-width: var(--max-width);
+    margin: 3rem auto 0;
+    padding: 0 1.5rem;
+    text-align: center;
+  }
+
+  .study-meta {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+
+  .study-meta .source { font-weight: 600; }
+  .study-meta .divider { margin: 0 0.5rem; opacity: 0.4; }
+
+  .study-title {
+    font-size: 2.2rem;
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    font-style: italic;
+  }
+
+  .study-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+  }
+
+  .series-nav {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .series-nav a {
+    color: var(--link);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .series-nav a:hover { color: var(--link-hover); border-color: var(--link-hover); }
+
+  .divider-ornament {
+    text-align: center;
+    margin: 2.5rem auto;
+    color: var(--border);
+    font-size: 1.2rem;
+    letter-spacing: 0.5rem;
+  }
+
+  .toc {
+    max-width: var(--max-width);
+    margin: 0 auto 3rem;
+    padding: 1.5rem 2rem;
+    background: var(--bg-alt);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+  }
+
+  .toc h2 {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .toc ol { list-style: none; counter-reset: toc; padding: 0; }
+  .toc li { counter-increment: toc; margin-bottom: 0.4rem; }
+
+  .toc li::before {
+    content: counter(toc) ".";
+    color: var(--accent);
+    font-weight: 600;
+    margin-right: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .toc a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+
+  .toc a:hover { border-bottom-color: var(--accent); }
+
+  .study-content {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .study-section { margin-bottom: 3.5rem; }
+
+  .section-heading {
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .section-number {
+    color: var(--accent);
+    font-weight: 700;
+    margin-right: 0.3rem;
+  }
+
+  .drop-cap::first-letter {
+    float: left;
+    font-size: 3.5em;
+    line-height: 0.8;
+    padding-right: 0.08em;
+    padding-top: 0.07em;
+    color: var(--drop-cap);
+    font-weight: 400;
+  }
+
+  .scripture-block {
+    background: var(--bg-scripture);
+    border-left: 3px solid var(--accent);
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .scripture-block .verse-text {
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-scripture);
+  }
+
+  .scripture-block .verse-ref {
+    display: block;
+    margin-top: 0.5rem;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--accent);
+  }
+
+  .scripture-block .verse-ref a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--accent);
+  }
+
+  .scripture-block .verse-ref a:hover { border-bottom-style: solid; }
+
+  .scripture-ref {
+    color: var(--link);
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 1px dotted var(--link);
+    white-space: nowrap;
+  }
+
+  .scripture-ref:hover {
+    color: var(--link-hover);
+    border-bottom-style: solid;
+  }
+
+  .verse-expand {
+    margin: 1rem 0;
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .verse-expand summary {
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    background: var(--bg-alt);
+    color: var(--text);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .verse-expand summary::before {
+    content: "\25B8";
+    font-size: 0.7rem;
+    color: var(--accent);
+    transition: transform 0.2s;
+  }
+
+  .verse-expand[open] summary::before { transform: rotate(90deg); }
+
+  .verse-expand .expand-content {
+    padding: 1rem 1.25rem;
+    font-size: 0.92rem;
+    color: var(--text-scripture);
+    font-style: italic;
+    line-height: 1.7;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .verse-expand .expand-note {
+    font-style: normal;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .biblical-placement {
+    background: var(--bg-aside);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+
+  .biblical-placement .aside-label {
+    font-family: var(--font-sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .study-content p { margin-bottom: 1rem; }
+  .study-content strong { font-weight: 700; color: var(--text); }
+
+  .closing-thought {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    margin: 3rem 0;
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .closing-thought h2 {
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+
+  .closing-thought p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    max-width: 540px;
+    margin: 0 auto 0.75rem;
+  }
+
+  .quote-block {
+    max-width: var(--max-width);
+    margin: 2rem auto;
+    padding: 0 0.5rem;
+  }
+
+  .quote-block .quote {
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--text-scripture);
+    border-left: 2px solid var(--accent-light);
+    padding-left: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .quote-block .quote .attr {
+    display: block;
+    font-style: normal;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+  }
+
+  .scripture-index {
+    max-width: var(--max-width);
+    margin: 3rem auto;
+    padding: 2rem 1.5rem;
+    border-top: 2px solid var(--border);
+  }
+
+  .scripture-index h2 {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .index-columns {
+    columns: 2;
+    column-gap: 2rem;
+    font-size: 0.85rem;
+  }
+
+  .index-entry {
+    break-inside: avoid;
+    margin-bottom: 0.3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .index-entry a {
+    color: var(--link);
+    text-decoration: none;
+  }
+
+  .index-entry a:hover { color: var(--link-hover); }
+
+  .index-section {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-family: var(--font-sans);
+    margin-left: 0.5rem;
+  }
+
+  .study-footer {
+    max-width: var(--max-width);
+    margin: 3rem auto;
+    padding: 1.5rem;
+    text-align: center;
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-light);
+  }
+
+  .study-footer a { color: var(--link); text-decoration: none; }
+
+  @media (max-width: 600px) {
+    html { font-size: 16px; }
+    .study-title { font-size: 1.8rem; }
+    .section-heading { font-size: 1.2rem; }
+    .index-columns { columns: 1; }
+    .study-header { margin-top: 2rem; }
+    .top-bar { padding: 0.5rem 1rem; }
+  }
+
+  @media print {
+    .top-bar, .theme-toggle, .translation-select { display: none; }
+    body { background: white; color: black; font-size: 11pt; }
+    .scripture-block { border-left-color: #666; background: #f5f5f5; }
+    .study-header { margin-top: 0; }
+    .verse-expand { break-inside: avoid; }
+    .verse-expand[open] .expand-content { display: block; }
+    a { color: inherit; text-decoration: none; }
+    .scripture-ref { border-bottom: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-bar-left">
+    <a href="index.html" class="logo">Berean Study</a>
+  </div>
+  <div class="top-bar-right">
+    <select class="translation-select" id="translationSelect" aria-label="Bible translation">
+      <option value="esv">ESV</option>
+      <option value="nkjv">NKJV</option>
+      <option value="kjv">KJV</option>
+      <option value="nasb20">NASB</option>
+      <option value="niv">NIV</option>
+      <option value="nlt">NLT</option>
+    </select>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">&#9684;</button>
+  </div>
+</div>
+
+<header class="study-header">
+  <div class="study-meta">
+    <span class="source">Fearless House</span>
+    <span class="divider">&middot;</span>
+    <span class="date">July 16, 2026</span>
+    <span class="divider">&middot;</span>
+    <span class="series">Pastor Mike Connaway</span>
+  </div>
+  <h1 class="study-title">Faith. Hope. Love.</h1>
+  <p class="study-subtitle">The Three That Remain &mdash; and How They Work Together</p>
+  <nav class="series-nav">
+    <a href="2026-07-17-think-kindness-leads-to-repentance.html">&larr; Fearless House &middot; THINK!</a>
+  </nav>
+</header>
+
+<div class="divider-ornament">&#10022; &#10022; &#10022;</div>
+
+<nav class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#section-intro">The Three That Remain</a></li>
+    <li><a href="#section-1">Hope Is the Blueprint</a></li>
+    <li><a href="#section-2">Faith Is the Activator</a></li>
+    <li><a href="#section-3">Love Is the Motive and the Arena</a></li>
+    <li><a href="#section-synergy">The Synergy</a></li>
+  </ol>
+</nav>
+
+<main class="study-content">
+
+  <!-- ══════════ Intro ══════════ -->
+  <section class="study-section" id="section-intro">
+    <h2 class="section-heading">The Three That Remain</h2>
+
+    <div class="scripture-block">
+      <p class="verse-text">"So now faith, hope, and love abide, these three; but the greatest of these is love."</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/1co/13/13/" class="scripture-ref" data-book="1co" data-chapter="13" data-verse="13" target="_blank" rel="noopener">1 Corinthians 13:13</a></span>
+    </div>
+
+    <p class="drop-cap">Paul ends his great chapter on love with three words that outlast everything else: faith, hope, and love. He calls them the things that "abide"&mdash;the realities still standing when prophecies cease and knowledge passes away. But notice he does not rank them as rivals. They are not three competing virtues fighting for first place in the Christian life. They are three parts of one motion. When they are joined together, they create spiritual momentum; separated, each one stalls.</p>
+
+    <p>The sermon frames the relationship with three roles. <strong>Hope is the blueprint. Faith is the activator. Love is the motive and the arena.</strong> Hope shows you what could be; faith moves you toward it; love is both why you move and where the moving happens. Take away any one and the other two lose their bearings&mdash;which is exactly why Scripture so often names them in the same breath.</p>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/1th/1/3/" class="scripture-ref" data-book="1th" data-chapter="1" data-verse="3" target="_blank" rel="noopener">1 Thessalonians 1:3</a></summary>
+      <div class="expand-content">"remembering before our God and Father your work of faith and labor of love and steadfastness of hope in our Lord Jesus Christ."</div>
+      <p class="expand-note">Paul's earliest surviving letter already pairs the three&mdash;and pins a verb to each: faith works, love labors, hope endures. The triad is not abstract; it is the shape of a living church.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/col/1/4/" class="scripture-ref" data-book="col" data-chapter="1" data-verse="4" target="_blank" rel="noopener">Colossians 1:4-5</a></summary>
+      <div class="expand-content">"since we heard of your faith in Christ Jesus and of the love that you have for all the saints, because of the hope laid up for you in heaven."</div>
+      <p class="expand-note">Paul makes the order of operations explicit: faith and love spring up <em>because of</em> the hope stored up in heaven. Hope is the root that faith and love grow from&mdash;the blueprint before the building.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/1th/5/8/" class="scripture-ref" data-book="1th" data-chapter="5" data-verse="8" target="_blank" rel="noopener">1 Thessalonians 5:8</a></summary>
+      <div class="expand-content">"But since we belong to the day, let us be sober, having put on the breastplate of faith and love, and for a helmet the hope of salvation."</div>
+      <p class="expand-note">Paul turns the triad into armor. Faith and love guard the heart like a breastplate; hope guards the mind like a helmet. The three aren't only virtues to admire&mdash;they are protection to wear into battle.</p>
+    </details>
+
+    <div class="biblical-placement">
+      <p class="aside-label">Biblical Placement</p>
+      <p>First Corinthians 13 sits inside Paul's correction of a gifted but fractured church (<a href="https://www.blueletterbible.org/esv/1co/12/1/" class="scripture-ref" data-book="1co" data-chapter="12" data-verse="1" target="_blank" rel="noopener">1 Corinthians 12&ndash;14</a>). The Corinthians prized spectacular gifts&mdash;tongues, prophecy, knowledge&mdash;and Paul interrupts the argument to insist that all of it is worthless without love. The famous "love chapter," often read at weddings, was written to a community tearing itself apart over spiritual status. Its climax in verse 13 quietly reorders their whole value system: the gifts they were fighting over will pass away, but faith, hope, and love remain. Paul is not being sentimental. He is telling a proud church what actually lasts.</p>
+    </div>
+  </section>
+
+  <!-- ══════════ Section 1 — Hope ══════════ -->
+  <section class="study-section" id="section-1">
+    <h2 class="section-heading"><span class="section-number">1.</span> Hope Is the Blueprint</h2>
+
+    <div class="scripture-block">
+      <p class="verse-text">"For in this hope we were saved. Now hope that is seen is not hope. For who hopes for what he sees? But if we hope for what we do not see, we wait for it with patience."</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/rom/8/24/" class="scripture-ref" data-book="rom" data-chapter="8" data-verse="24" target="_blank" rel="noopener">Romans 8:24-25</a></span>
+    </div>
+
+    <p class="drop-cap">Biblical hope is not wishful thinking. It is not "I hope it works out." It is the settled expectation of what God has promised but has not yet delivered&mdash;the picture of the finished house before the first nail is driven. Paul says we were saved "in this hope," and then defines it by what it is not: hope, by nature, reaches for what is unseen. If you already had it in hand, you would not need to hope for it. Hope is the faculty that lets us live now in light of a future only God can see clearly.</p>
+
+    <p>That is why the sermon calls hope the blueprint. <strong>Without hope, faith has nothing to move toward. Hope paints the picture.</strong> Faith is powerful, but faith is directional&mdash;it needs a destination. Hope supplies it. Before a single act of faith makes sense, hope has to sketch what God intends, so that faith knows which way to walk.</p>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/heb/6/19/" class="scripture-ref" data-book="heb" data-chapter="6" data-verse="19" target="_blank" rel="noopener">Hebrews 6:19</a></summary>
+      <div class="expand-content">"We have this as a sure and steadfast anchor of the soul, a hope that enters into the inner place behind the curtain,"</div>
+      <p class="expand-note">Hope is an anchor&mdash;but an unusual one. It is fixed not below us in shifting sand but above us, "behind the curtain," in the very presence of God. Because its hold is fastened in heaven, it steadies a soul no earthly storm can reach.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/jer/29/11/" class="scripture-ref" data-book="jer" data-chapter="29" data-verse="11" target="_blank" rel="noopener">Jeremiah 29:11</a></summary>
+      <div class="expand-content">"For I know the plans I have for you, declares the Lord, plans for welfare and not for evil, to give you a future and a hope."</div>
+      <p class="expand-note">God speaks of His own <em>plans</em>&mdash;the blueprint He holds even when His people cannot see it. Spoken to exiles, this is hope with an architect: the future is not vague optimism but a design already drawn in the mind of God.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/rom/15/13/" class="scripture-ref" data-book="rom" data-chapter="15" data-verse="13" target="_blank" rel="noopener">Romans 15:13</a></summary>
+      <div class="expand-content">"May the God of hope fill you with all joy and peace in believing, so that by the power of the Holy Spirit you may abound in hope."</div>
+      <p class="expand-note">Hope is not self-generated. It is filled and fueled by "the God of hope" through the Spirit. When hope runs dry, the answer is not to try harder to feel hopeful but to return to its source.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/lam/3/22/" class="scripture-ref" data-book="lam" data-chapter="3" data-verse="22" target="_blank" rel="noopener">Lamentations 3:22-24</a></summary>
+      <div class="expand-content">"The steadfast love of the Lord never ceases; his mercies never come to an end; they are new every morning; great is your faithfulness. 'The Lord is my portion,' says my soul, 'therefore I will hope in him.'"</div>
+      <p class="expand-note">Written amid the rubble of Jerusalem, this is hope at its most defiant. The prophet does not deny the ruin; he anchors his hope to God's unfailing mercies instead. Hope survives even in Lamentations because its blueprint is drawn on God's character, not on circumstances.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/pro/29/18/" class="scripture-ref" data-book="pro" data-chapter="29" data-verse="18" target="_blank" rel="noopener">Proverbs 29:18</a></summary>
+      <div class="expand-content">"Where there is no prophetic vision the people cast off restraint, but blessed is he who keeps the law."</div>
+      <p class="expand-note">Without a God-given vision of the future, people lose their bearings and "cast off restraint." Vision&mdash;the blueprint hope supplies&mdash;is what gives a life direction and self-government. Remove the picture, and behavior unravels.</p>
+    </details>
+
+    <div class="biblical-placement">
+      <p class="aside-label">Biblical Placement</p>
+      <p>Romans 8 is the summit of Paul's letter&mdash;the chapter that moves from "no condemnation" (<a href="https://www.blueletterbible.org/esv/rom/8/1/" class="scripture-ref" data-book="rom" data-chapter="8" data-verse="1" target="_blank" rel="noopener">8:1</a>) to "no separation" (<a href="https://www.blueletterbible.org/esv/rom/8/38/" class="scripture-ref" data-book="rom" data-chapter="8" data-verse="38" target="_blank" rel="noopener">8:38-39</a>). Verses 24-25 sit in the middle of a passage where all creation groans, waiting to be set free (<a href="https://www.blueletterbible.org/esv/rom/8/22/" class="scripture-ref" data-book="rom" data-chapter="8" data-verse="22" target="_blank" rel="noopener">8:22-23</a>). Paul is honest that the present is full of suffering&mdash;and precisely there he plants hope, not as escape but as endurance. Christian hope always looks at the unfinished world and the unfinished self and says: this is not the end of the blueprint. The groaning is labor, not death.</p>
+    </div>
+  </section>
+
+  <!-- ══════════ Section 2 — Faith ══════════ -->
+  <section class="study-section" id="section-2">
+    <h2 class="section-heading"><span class="section-number">2.</span> Faith Is the Activator</h2>
+
+    <div class="scripture-block">
+      <p class="verse-text">"Now faith is the assurance of things hoped for, the conviction of things not seen."</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/heb/11/1/" class="scripture-ref" data-book="heb" data-chapter="11" data-verse="1" target="_blank" rel="noopener">Hebrews 11:1</a></span>
+    </div>
+
+    <p class="drop-cap">Watch how faith and hope interlock in this one verse. Faith is the assurance of "things <em>hoped</em> for." Hope draws the picture of what God has promised; faith is the confidence that acts as though the picture is already real. If hope is the blueprint, faith is the crew that starts building before the house exists. It is the substance that gives weight to what is still unseen&mdash;the bridge between a promise and a step.</p>
+
+    <p>Which is why the sermon calls faith the activator. <strong>Faith doesn't wait for certainty&mdash;it trusts God enough to obey.</strong> James pushes this to its edge: a faith that never activates into action is not weak faith, it is dead faith. The proof of faith is never a feeling of conviction; it is movement. Faith is hope with its work boots on.</p>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/jas/2/17/" class="scripture-ref" data-book="jas" data-chapter="2" data-verse="17" target="_blank" rel="noopener">James 2:17</a></summary>
+      <div class="expand-content">"So also faith by itself, if it does not have works, is dead."</div>
+      <p class="expand-note">The source verse for this point. James is not opposing faith to works&mdash;he is defining living faith <em>as</em> the kind that works. Faith that never activates has no more life in it than a body without breath.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/jas/2/22/" class="scripture-ref" data-book="jas" data-chapter="2" data-verse="22" target="_blank" rel="noopener">James 2:22</a></summary>
+      <div class="expand-content">"You see that faith was active along with his works, and faith was completed by his works;"</div>
+      <p class="expand-note">Speaking of Abraham, James says faith is "completed" by action. Faith is not finished the moment you believe; it is finished the moment belief moves. The activator only counts when it actually switches something on.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/heb/11/6/" class="scripture-ref" data-book="heb" data-chapter="11" data-verse="6" target="_blank" rel="noopener">Hebrews 11:6</a></summary>
+      <div class="expand-content">"And without faith it is impossible to please him, for whoever would draw near to God must believe that he exists and that he rewards those who seek him."</div>
+      <p class="expand-note">Faith is the non-negotiable. The whole "hall of faith" that follows (Hebrews 11) is a parade of people who <em>acted</em> on God's promises&mdash;Noah built, Abraham left, Moses chose. Every one of them activated a hope they could not yet see.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/2co/5/7/" class="scripture-ref" data-book="2co" data-chapter="5" data-verse="7" target="_blank" rel="noopener">2 Corinthians 5:7</a></summary>
+      <div class="expand-content">"for we walk by faith, not by sight."</div>
+      <p class="expand-note">Faith is a way of walking, not merely a way of thinking. It moves the feet toward the unseen blueprint of hope precisely when sight would keep them still. Faith is the leg of the journey you take before the destination comes into view.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/mat/17/20/" class="scripture-ref" data-book="mat" data-chapter="17" data-verse="20" target="_blank" rel="noopener">Matthew 17:20</a></summary>
+      <div class="expand-content">"...For truly, I say to you, if you have faith like a grain of mustard seed, you will say to this mountain, 'Move from here to there,' and it will move, and nothing will be impossible for you."</div>
+      <p class="expand-note">Jesus locates faith's power not in its size but in its object. A mustard-seed faith that <em>acts</em> moves mountains, because it is trusting a God for whom nothing is impossible. Small faith activated beats great faith admired.</p>
+    </details>
+
+    <div class="biblical-placement">
+      <p class="aside-label">Biblical Placement</p>
+      <p>Hebrews 11 opens with this definition and then unrolls the entire Old Testament as one long testimony to faith in action&mdash;Abel, Enoch, Noah, Abraham, Moses, Rahab, and "the prophets" (<a href="https://www.blueletterbible.org/esv/heb/11/32/" class="scripture-ref" data-book="heb" data-chapter="11" data-verse="32" target="_blank" rel="noopener">11:32-38</a>). The letter was written to Jewish believers tempted to drift back from Christ under pressure and persecution. The writer's answer is not new doctrine but a cloud of witnesses (<a href="https://www.blueletterbible.org/esv/heb/12/1/" class="scripture-ref" data-book="heb" data-chapter="12" data-verse="1" target="_blank" rel="noopener">12:1</a>): people who staked their lives on promises they died without receiving. James, writing to scattered Jewish Christians, presses the same nerve from the other side&mdash;warning against a faith that has become mere assent. Together the two books guard faith from both dangers: don't abandon it, and don't fake it. Real faith endures, and real faith acts.</p>
+    </div>
+  </section>
+
+  <!-- ══════════ Section 3 — Love ══════════ -->
+  <section class="study-section" id="section-3">
+    <h2 class="section-heading"><span class="section-number">3.</span> Love Is the Motive and the Arena</h2>
+
+    <div class="scripture-block">
+      <p class="verse-text">"A new commandment I give to you, that you love one another: just as I have loved you, you also are to love one another. By this all people will know that you are my disciples, if you have love for one another."</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/jhn/13/34/" class="scripture-ref" data-book="jhn" data-chapter="13" data-verse="34" target="_blank" rel="noopener">John 13:34-35</a></span>
+    </div>
+
+    <p class="drop-cap">Love is why any of this matters and where all of it plays out. It is the <em>motive</em>&mdash;the reason faith bothers to act and hope bothers to endure. And it is the <em>arena</em>&mdash;the actual field on which faith and hope are proven, because faith always works itself out toward people. Jesus does not tell His disciples to be known by their doctrine or their gifts, but by their love for one another. Love is the visible surface of an invisible faith.</p>
+
+    <p>Paul crystallizes the whole relationship in a single phrase: faith "working through love" (<a href="https://www.blueletterbible.org/esv/gal/5/6/" class="scripture-ref" data-book="gal" data-chapter="5" data-verse="6" target="_blank" rel="noopener">Galatians 5:6</a>). Faith is the activator, but love is what it activates <em>into</em>. <strong>Hope gives us vision. Faith gives us movement. Love gives us purpose.</strong> Strip love out and the other two curdle: faith becomes cold orthodoxy, hope becomes private escapism. Love is what keeps the whole machine pointed at the heart of God&mdash;and at your neighbor.</p>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/gal/5/6/" class="scripture-ref" data-book="gal" data-chapter="5" data-verse="6" target="_blank" rel="noopener">Galatians 5:6</a></summary>
+      <div class="expand-content">"For in Christ Jesus neither circumcision nor uncircumcision counts for anything, but only faith working through love."</div>
+      <p class="expand-note">The source verse&mdash;and one of the most compact theology lessons in Scripture. Faith is real, but it "works through love." Love is the channel faith flows down. A faith that does not move toward people has nowhere to go.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/1co/13/1/" class="scripture-ref" data-book="1co" data-chapter="13" data-verse="1" target="_blank" rel="noopener">1 Corinthians 13:1-3</a></summary>
+      <div class="expand-content">"If I speak in the tongues of men and of angels, but have not love, I am a noisy gong or a clanging cymbal. And if I have prophetic powers... and if I have all faith, so as to remove mountains, but have not love, I am nothing."</div>
+      <p class="expand-note">Paul says even mountain-moving faith, "but have not love, I am nothing." Love is the arena where everything is weighed. Faith and hope without love do not merely underperform&mdash;they amount to zero.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/rom/13/10/" class="scripture-ref" data-book="rom" data-chapter="13" data-verse="10" target="_blank" rel="noopener">Romans 13:10</a></summary>
+      <div class="expand-content">"Love does no wrong to a neighbor; therefore love is the fulfilling of the law."</div>
+      <p class="expand-note">Love is not one command among many; it is the sum of them all. Everything the law aimed at&mdash;honesty, faithfulness, honor&mdash;is achieved wherever love is genuinely at work. Love is the fulfillment, not the exception.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/mat/22/37/" class="scripture-ref" data-book="mat" data-chapter="22" data-verse="37" target="_blank" rel="noopener">Matthew 22:37-40</a></summary>
+      <div class="expand-content">"You shall love the Lord your God with all your heart and with all your soul and with all your mind. This is the great and first commandment. And a second is like it: You shall love your neighbor as yourself. On these two commandments depend all the Law and the Prophets."</div>
+      <p class="expand-note">Jesus hangs "all the Law and the Prophets" on two loves&mdash;God and neighbor. Love is the arena because it has two directions: upward as motive, outward as expression. Everything else in Scripture is commentary on these two.</p>
+    </details>
+
+    <details class="verse-expand">
+      <summary><a href="https://www.blueletterbible.org/esv/1jo/3/18/" class="scripture-ref" data-book="1jo" data-chapter="3" data-verse="18" target="_blank" rel="noopener">1 John 3:18</a></summary>
+      <div class="expand-content">"Little children, let us not love in word or talk but in deed and in truth."</div>
+      <p class="expand-note">John insists love is not a sentiment but an act&mdash;"in deed and in truth." This is love as arena: the place where faith stops talking and starts serving. Real love, like real faith, is measured by what it does.</p>
+    </details>
+
+    <div class="biblical-placement">
+      <p class="aside-label">Biblical Placement</p>
+      <p>Jesus gives this "new commandment" in the Upper Room on the night before His crucifixion (<a href="https://www.blueletterbible.org/esv/jhn/13/1/" class="scripture-ref" data-book="jhn" data-chapter="13" data-verse="1" target="_blank" rel="noopener">John 13&ndash;17</a>)&mdash;moments after washing His disciples' feet and moments before Gethsemane. What makes it "new" is the standard: "just as I have loved you." The measure of love is no longer "as yourself" but "as Christ loved"&mdash;a love that stoops, serves, and lays itself down. Paul's phrase in Galatians, "faith working through love," was written to churches tempted to make Christianity about rule-keeping (circumcision); he answers that the engine of the whole Christian life is not law but love-driven faith. From the Upper Room to Galatia, the verdict is the same: the proof of belonging to Christ is not what you profess but how you love.</p>
+    </div>
+  </section>
+
+  <!-- ══════════ Synergy ══════════ -->
+  <section class="study-section" id="section-synergy">
+    <h2 class="section-heading">The Synergy</h2>
+
+    <p>The three were never meant to be held apart. The sermon lands on how they fail in isolation and flourish in union:</p>
+
+    <p><strong>Faith without hope loses direction.</strong> Movement with no blueprint is just restlessness&mdash;energy spent going nowhere.</p>
+
+    <p><strong>Hope without faith never becomes reality.</strong> A blueprint no one builds stays a drawing forever&mdash;a beautiful picture that never becomes a home.</p>
+
+    <p><strong>Faith and hope without love miss the heart of God.</strong> You can believe rightly and hope confidently and still be, in Paul's words, "a noisy gong"&mdash;because God's heart has always been love.</p>
+
+    <div class="scripture-block">
+      <p class="verse-text">"For through the Spirit, by faith, we ourselves eagerly wait for the hope of righteousness. For in Christ Jesus neither circumcision nor uncircumcision counts for anything, but only faith working through love."</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/gal/5/5/" class="scripture-ref" data-book="gal" data-chapter="5" data-verse="5" target="_blank" rel="noopener">Galatians 5:5-6</a></span>
+    </div>
+
+    <p>In two verses Paul holds all three at once: "by <em>faith</em> we eagerly wait for the <em>hope</em> of righteousness&hellip; faith working through <em>love</em>." Faith is the posture, hope is the object, love is the outworking&mdash;one continuous motion of the Spirit-filled life. This is the synergy in a sentence.</p>
+
+    <div class="scripture-block">
+      <p class="verse-text">"...we rejoice in hope of the glory of God... and hope does not put us to shame, because God's love has been poured into our hearts through the Holy Spirit who has been given to us."</p>
+      <span class="verse-ref">&mdash; <a href="https://www.blueletterbible.org/esv/rom/5/1/" class="scripture-ref" data-book="rom" data-chapter="5" data-verse="1" target="_blank" rel="noopener">Romans 5:1-5</a></span>
+    </div>
+
+    <p>Paul traces the full chain: justified <em>by faith</em>, we rejoice in <em>hope</em>, and that hope holds because God's <em>love</em> has been poured into our hearts. Faith opens the door, hope carries us forward, love floods in and guarantees the outcome. The three are one current of grace.</p>
+
+    <div class="quote-block">
+      <p class="quote">"Faith is the gaze of a soul upon a saving God."<span class="attr">&mdash; A. W. Tozer</span></p>
+      <p class="quote">"The Christian is a person of hope. Our hope is not based on optimism but on the promises of God."<span class="attr">&mdash; Billy Graham</span></p>
+      <p class="quote">"Life is all about love. It's the only thing that lasts."<span class="attr">&mdash; Rick Warren</span></p>
+    </div>
+  </section>
+
+  <!-- ══════════ Closing ══════════ -->
+  <section class="closing-thought">
+    <h2>Closing Thought</h2>
+    <p>Hope paints the picture of what God has promised.</p>
+    <p>Faith trusts Him enough to move toward it.</p>
+    <p>Love is why we move&hellip; and where the moving happens.</p>
+    <p><strong>And the greatest of these is love.</strong></p>
+  </section>
+
+</main>
+
+<!-- ══════════ Scripture Index ══════════ -->
+<section class="scripture-index">
+  <h2>Scripture Index</h2>
+  <div class="index-columns">
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/pro/29/18/" class="scripture-ref" data-book="pro" data-chapter="29" data-verse="18" target="_blank" rel="noopener">Proverbs 29:18</a>
+      <span class="index-section"><a href="#section-1">&sect;1</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/lam/3/22/" class="scripture-ref" data-book="lam" data-chapter="3" data-verse="22" target="_blank" rel="noopener">Lamentations 3:22-24</a>
+      <span class="index-section"><a href="#section-1">&sect;1</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/jer/29/11/" class="scripture-ref" data-book="jer" data-chapter="29" data-verse="11" target="_blank" rel="noopener">Jeremiah 29:11</a>
+      <span class="index-section"><a href="#section-1">&sect;1</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/mat/17/20/" class="scripture-ref" data-book="mat" data-chapter="17" data-verse="20" target="_blank" rel="noopener">Matthew 17:20</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/mat/22/37/" class="scripture-ref" data-book="mat" data-chapter="22" data-verse="37" target="_blank" rel="noopener">Matthew 22:37-40</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/jhn/13/34/" class="scripture-ref" data-book="jhn" data-chapter="13" data-verse="34" target="_blank" rel="noopener">John 13:34-35</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/rom/5/1/" class="scripture-ref" data-book="rom" data-chapter="5" data-verse="1" target="_blank" rel="noopener">Romans 5:1-5</a>
+      <span class="index-section"><a href="#section-synergy">Synergy</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/rom/8/24/" class="scripture-ref" data-book="rom" data-chapter="8" data-verse="24" target="_blank" rel="noopener">Romans 8:24-25</a>
+      <span class="index-section"><a href="#section-1">&sect;1</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/rom/13/10/" class="scripture-ref" data-book="rom" data-chapter="13" data-verse="10" target="_blank" rel="noopener">Romans 13:10</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/rom/15/13/" class="scripture-ref" data-book="rom" data-chapter="15" data-verse="13" target="_blank" rel="noopener">Romans 15:13</a>
+      <span class="index-section"><a href="#section-1">&sect;1</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/1co/13/1/" class="scripture-ref" data-book="1co" data-chapter="13" data-verse="1" target="_blank" rel="noopener">1 Corinthians 13:1-3</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/1co/13/13/" class="scripture-ref" data-book="1co" data-chapter="13" data-verse="13" target="_blank" rel="noopener">1 Corinthians 13:13</a>
+      <span class="index-section"><a href="#section-intro">Intro</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/2co/5/7/" class="scripture-ref" data-book="2co" data-chapter="5" data-verse="7" target="_blank" rel="noopener">2 Corinthians 5:7</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/gal/5/5/" class="scripture-ref" data-book="gal" data-chapter="5" data-verse="5" target="_blank" rel="noopener">Galatians 5:5-6</a>
+      <span class="index-section"><a href="#section-synergy">Synergy</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/gal/5/6/" class="scripture-ref" data-book="gal" data-chapter="5" data-verse="6" target="_blank" rel="noopener">Galatians 5:6</a>
+      <span class="index-section"><a href="#section-3">&sect;3</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/col/1/4/" class="scripture-ref" data-book="col" data-chapter="1" data-verse="4" target="_blank" rel="noopener">Colossians 1:4-5</a>
+      <span class="index-section"><a href="#section-intro">Intro</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/1th/1/3/" class="scripture-ref" data-book="1th" data-chapter="1" data-verse="3" target="_blank" rel="noopener">1 Thessalonians 1:3</a>
+      <span class="index-section"><a href="#section-intro">Intro</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/1th/5/8/" class="scripture-ref" data-book="1th" data-chapter="5" data-verse="8" target="_blank" rel="noopener">1 Thessalonians 5:8</a>
+      <span class="index-section"><a href="#section-intro">Intro</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/heb/6/19/" class="scripture-ref" data-book="heb" data-chapter="6" data-verse="19" target="_blank" rel="noopener">Hebrews 6:19</a>
+      <span class="index-section"><a href="#section-1">&sect;1</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/heb/11/1/" class="scripture-ref" data-book="heb" data-chapter="11" data-verse="1" target="_blank" rel="noopener">Hebrews 11:1</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/heb/11/6/" class="scripture-ref" data-book="heb" data-chapter="11" data-verse="6" target="_blank" rel="noopener">Hebrews 11:6</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/jas/2/17/" class="scripture-ref" data-book="jas" data-chapter="2" data-verse="17" target="_blank" rel="noopener">James 2:17</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a></span>
+    </div>
+    <div class="index-entry">
+      <a href="https://www.blueletterbible.org/esv/jas/2/22/" class="scripture-ref" data-book="jas" data-chapter="2" data-verse="22" target="_blank" rel="noopener">James 2:22</a>
+      <span class="index-section"><a href="#section-2">&sect;2</a></span>
+    </div>
+  </div>
+</section>
+
+<footer class="study-footer">
+  <p>Generated by <a href="index.html">Berean Study</a> &middot; Scripture links open at <a href="https://www.blueletterbible.org" target="_blank" rel="noopener">Blue Letter Bible</a></p>
+  <p>Inline verse text: ESV &middot; External links follow your selected translation</p>
+</footer>
+
+<script>
+(function() {
+  var html = document.documentElement;
+  var toggle = document.getElementById('themeToggle');
+  var stored = localStorage.getItem('berean-theme');
+  if (stored) html.setAttribute('data-theme', stored);
+
+  toggle.addEventListener('click', function() {
+    var next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('berean-theme', next);
+  });
+
+  var select = document.getElementById('translationSelect');
+  var savedTranslation = localStorage.getItem('berean-translation') || 'esv';
+  select.value = savedTranslation;
+  updateLinks(savedTranslation);
+
+  select.addEventListener('change', function() {
+    var translation = this.value;
+    localStorage.setItem('berean-translation', translation);
+    updateLinks(translation);
+  });
+
+  function updateLinks(translation) {
+    document.querySelectorAll('.scripture-ref').forEach(function(link) {
+      var book = link.dataset.book;
+      var chapter = link.dataset.chapter;
+      var verse = link.dataset.verse;
+      if (book && chapter) {
+        var url = 'https://www.blueletterbible.org/' + translation + '/' + book + '/' + chapter + '/';
+        if (verse) url += verse + '/';
+        link.href = url;
+      }
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
